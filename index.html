@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="hJMA0o8E6TjepNc46esvi3WKQ-dWK-ndfBdicCSRx8o" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <title>RK LIVE TV</title>
+    <!-- HLS.js for M3U8 playback -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Firebase App & Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <style>
+        /* Base Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0b0f; color: #ffffff; overflow-x: hidden; width: 100%; }
+
+        /* Navbar */
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background-color: #0f0f13; border-bottom: 1px solid #1f1f25; position: sticky; top: 0; z-index: 100; width: 100%; }
+        .logo { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; letter-spacing: 1px; }
+        .logo span.live { color: #ff0055; }
+        .logo span.tv { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 6px; font-size: 16px; font-weight: bold; }
+        
+        .search-container { position: relative; }
+        .search-box { background: #16161a; border: 1px solid #2c2c35; color: white; padding: 8px 15px 8px 35px; border-radius: 20px; outline: none; width: 150px; font-size: 13px; transition: 0.3s; }
+        .search-box:focus { border-color: #00d2ff; width: 180px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.6; pointer-events: none; }
+
+        /* Custom Video Player Styles */
+        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        video { width: 100%; height: 100%; object-fit: contain; outline: none; display: block; transition: object-fit 0.3s ease; }
+        
+        /* Toast Message for Aspect Ratio */
+        .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 100; pointer-events: none; letter-spacing: 1px; }
+        .toast.show { opacity: 1; }
+
+        /* Loading Overlay with Logo */
+        #loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
+        #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+        .spinner { border: 4px solid rgba(255, 255, 255, 0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: #00d2ff; animation: spin 1s linear infinite; margin-top: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Player Controls Overlay */
+        .player-controls { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 15px; background: rgba(0, 0, 0, 0.5); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 60;}
+        .player-controls.active { opacity: 1; pointer-events: auto; }
+        
+        /* Top Controls */
+        .controls-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .controls-top .left, .controls-top .right { display: flex; gap: 15px; align-items: center; }
+        .control-btn { background: none; border: none; color: white; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .control-btn:active { transform: scale(0.9); }
+        .control-btn svg { width: 28px; height: 28px; fill: white; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5)); }
+
+        /* Bottom Controls */
+        .controls-bottom { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .buttons-bottom { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 10px; }
+        
+        /* Center Large Play Button */
+        .center-controls { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 30px; align-items: center; }
+        .play-pause-btn { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: none; transition: transform 0.2s; }
+        .play-pause-btn:active { transform: scale(0.9); }
+        .play-pause-btn svg { width: 30px; height: 30px; fill: black; }
+        .skip-btn svg { width: 35px; height: 35px; }
+
+        /* Progress Bar */
+        .progress-container { display: flex; align-items: center; gap: 10px; width: 100%; font-size: 14px; font-weight: bold; text-shadow: 1px 1px 3px black; }
+        .progress-bar { flex-grow: 1; -webkit-appearance: none; appearance: none; height: 5px; background: rgba(255, 255, 255, 0.3); border-radius: 5px; outline: none; cursor: pointer; position: relative; }
+        .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: white; cursor: pointer; }
+        
+        /* Locked Screen State */
+        .video-wrapper.locked .controls-top .left,
+        .video-wrapper.locked .controls-top .right .control-btn:not(#btn-lock),
+        .video-wrapper.locked .controls-bottom,
+        .video-wrapper.locked .center-controls { display: none !important; }
+
+        /* Fullscreen modifications */
+        .video-wrapper:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; }
+
+        /* Channel Horizontal Scroll List - Fixed for 1st Picture Layout */
+        .channel-scroll-container { 
+            display: flex; 
+            flex-wrap: nowrap !important; /* Force single line */
+            overflow-x: auto; 
+            padding: 20px 15px; 
+            gap: 12px; 
+            background: #0b0b0f; 
+            scroll-behavior: smooth; 
+            -webkit-overflow-scrolling: touch; 
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .channel-scroll-container::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+        .channel-card { 
+            flex: 0 0 auto !important; /* Prevents wrapping/shrinking */
+            width: 125px; /* Slightly larger cards to match pic 1 */
+            background: #1a1a21; 
+            border-radius: 10px; 
+            padding: 8px; 
+            cursor: pointer; 
+            border: 2px solid transparent; 
+            transition: 0.2s; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        .channel-card:active { transform: scale(0.95); }
+        .channel-card.active { border-color: #00d2ff; background: #22222a; }
+        .channel-card img { width: 100%; height: 65px; object-fit: contain; background: #ffffff; border-radius: 6px; margin-bottom: 8px; padding: 2px;}
+        .channel-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; color: #e0e0e0; font-weight: 500; }
+
+        /* Notice Bar */
+        .notice-container { display: flex; align-items: center; background: #131318; border-top: 1px solid #222; border-bottom: 1px solid #222; margin-top: 5px; }
+        .notice-badge { background: linear-gradient(90deg, #ff0055, #ff0000); color: white; padding: 6px 15px; font-size: 12px; font-weight: bold; border-radius: 20px; margin: 8px 10px; white-space: nowrap; z-index: 2; box-shadow: 0 0 10px rgba(255,0,0,0.4); }
+        .notice-marquee { color: #00d2ff; font-size: 14px; padding-right: 10px; font-weight: 500; }
+
+        /* Desktop specific tweaks */
+        @media (min-width: 1024px) {
+            .search-box { width: 300px; }
+            .channel-scroll-container { flex-wrap: wrap !important; justify-content: center; overflow-x: hidden; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-box" placeholder="Search channel..." id="searchInput" onkeyup="searchChannel()">
+        </div>
+    </header>
+
+    <!-- Custom Video Player Section -->
+    <div class="video-wrapper" id="videoContainer">
+        
+        <div id="toast-msg" class="toast">Aspect Ratio Changed</div>
+
+        <!-- Loading overlay with logo -->
+        <div id="loading-overlay">
+            <div class="logo" style="font-size: 28px;">RK <span class="live">LIVE</span> <span class="tv" style="font-size: 22px;">TV</span></div>
+            <div class="spinner"></div>
+        </div>
+
+        <video id="video-player" playsinline preload="auto"></video>
+        
+        <div class="player-controls" id="playerControls">
+            <!-- Top Controls -->
+            <div class="controls-top">
+                <div class="left">
+                    <button class="control-btn" id="btn-back">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                </div>
+                <div class="right">
+                    <button class="control-btn" id="btn-cast">
+                        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-pip">
+                        <svg viewBox="0 0 24 24"><path d="M19 11h-8v6h8v-6zm4 8V4.98C23 3.88 22.1 3 21 3H3c-1.1 0-2 .88-2 1.98V19c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2zm-2 .02H3V4.97h18v14.05z"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-mute">
+                        <svg viewBox="0 0 24 24" id="icon-volume"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-lock">
+                        <svg viewBox="0 0 24 24" id="icon-lock"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Center Controls -->
+            <div class="center-controls">
+                <button class="control-btn skip-btn" id="btn-rewind">
+                    <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                </button>
+                <button class="play-pause-btn" id="btn-playpause">
+                    <svg viewBox="0 0 24 24" id="icon-play"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <button class="control-btn skip-btn" id="btn-forward">
+                    <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                </button>
+            </div>
+
+            <!-- Bottom Controls -->
+            <div class="controls-bottom">
+                <div class="buttons-bottom">
+                    <button class="control-btn" id="btn-aspect">
+                        <svg viewBox="0 0 24 24" id="icon-aspect"><path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/></svg>
+                    </button>
+                    <button class="control-btn" id="btn-fullscreen">
+                        <svg viewBox="0 0 24 24" id="icon-fullscreen"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+                    </button>
+                </div>
+                <div class="progress-container">
+                    <span id="current-time">00:00</span>
+                    <input type="range" class="progress-bar" id="progress-bar" value="0" min="0" max="100" step="0.1">
+                    <span id="total-time">00:00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Channels Horizontal Scroll -->
+    <div class="channel-scroll-container" id="user-channel-list">
+        <p style="color: #666; width: 100%; text-align: center;">Loading channels...</p>
+    </div>
+
+    <!-- Notice Bar -->
+    <div class="notice-container">
+        <div class="notice-badge">NOTICE</div>
+        <marquee class="notice-marquee" id="user-notice">Loading notice...</marquee>
+    </div>
+
+    <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD_mBhdk9OT8vWjlWZaayqEQtfcP66HS4Q",
+            authDomain: "my-digital-store-917ee.firebaseapp.com",
+            databaseURL: "https://my-digital-store-917ee-default-rtdb.firebaseio.com",
+            projectId: "my-digital-store-917ee",
+            storageBucket: "my-digital-store-917ee.firebasestorage.app",
+            messagingSenderId: "331387752425",
+            appId: "1:331387752425:web:2f79fc3fd2df2f84bb4578",
+            measurementId: "G-J20CK41YMD"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // --- Custom Player Logic ---
+        const video = document.getElementById('video-player');
+        const videoContainer = document.getElementById('videoContainer');
+        const playerControls = document.getElementById('playerControls');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const toastMsg = document.getElementById('toast-msg');
+        
+        // Buttons
+        const btnPlayPause = document.getElementById('btn-playpause');
+        const iconPlay = document.getElementById('icon-play');
+        const btnRewind = document.getElementById('btn-rewind');
+        const btnForward = document.getElementById('btn-forward');
+        const btnMute = document.getElementById('btn-mute');
+        const iconVolume = document.getElementById('icon-volume');
+        const btnFullscreen = document.getElementById('btn-fullscreen');
+        const iconFullscreen = document.getElementById('icon-fullscreen');
+        const btnLock = document.getElementById('btn-lock');
+        const iconLock = document.getElementById('icon-lock');
+        const btnAspect = document.getElementById('btn-aspect');
+        const iconAspect = document.getElementById('icon-aspect');
+        const btnPip = document.getElementById('btn-pip');
+        const btnBack = document.getElementById('btn-back');
+        
+        // Hide loading overlay when video plays
+        video.addEventListener('playing', () => loadingOverlay.classList.add('hidden'));
+        video.addEventListener('waiting', () => loadingOverlay.classList.remove('hidden'));
+
+        // --- Control Hide/Show Logic (Tap to Hide/Show) ---
+        let controlTimeout;
+        let isControlsVisible = false;
+
+        const showControls = () => {
+            playerControls.classList.add('active');
+            isControlsVisible = true;
+            resetControlTimer();
+        };
+
+        const hideControls = () => {
+            if (!video.paused && !videoContainer.classList.contains('locked')) {
+                playerControls.classList.remove('active');
+                isControlsVisible = false;
+                clearTimeout(controlTimeout);
+            }
+        };
+
+        const resetControlTimer = () => {
+            clearTimeout(controlTimeout);
+            controlTimeout = setTimeout(() => { hideControls(); }, 3000);
+        };
+
+        // Main Tap Logic
+        videoContainer.addEventListener('click', (e) => {
+            // If clicked specifically on a button or progress bar, DO NOT hide. Just reset timer.
+            if(e.target.closest('.control-btn') || e.target.closest('.play-pause-btn') || e.target.closest('.progress-bar')) {
+                showControls(); 
+                return;
+            }
+
+            // If clicked on empty space / video: Toggle visibility
+            if (isControlsVisible) {
+                hideControls();
+            } else {
+                showControls();
+            }
+        });
+
+        // Initialize show on load
+        showControls();
+
+        // --- Button Functions ---
+
+        // Play / Pause
+        const togglePlay = (e) => {
+            if(e) e.stopPropagation();
+            if (video.paused) {
+                video.play();
+                iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; // Pause Icon
+            } else {
+                video.pause();
+                iconPlay.innerHTML = '<path d="M8 5v14l11-7z"/>'; // Play Icon
+                showControls(); // Keep controls visible if paused
+            }
+        };
+        btnPlayPause.addEventListener('click', togglePlay);
+
+        // Rewind & Forward 10s
+        btnRewind.addEventListener('click', () => { video.currentTime -= 10; });
+        btnForward.addEventListener('click', () => { video.currentTime += 10; });
+
+        // Mute / Unmute
+        btnMute.addEventListener('click', () => {
+            video.muted = !video.muted;
+            if(video.muted) {
+                iconVolume.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+            } else {
+                iconVolume.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+            }
+        });
+
+        // Fullscreen & Auto Landscape Rotate
+        btnFullscreen.addEventListener('click', async () => {
+            if (!document.fullscreenElement) {
+                try {
+                    if (videoContainer.requestFullscreen) { await videoContainer.requestFullscreen(); }
+                    else if (videoContainer.webkitRequestFullscreen) { await videoContainer.webkitRequestFullscreen(); }
+                    if (screen.orientation && screen.orientation.lock) { await screen.orientation.lock("landscape"); }
+                } catch (err) { console.log("Fullscreen Error:", err); }
+                iconFullscreen.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>'; 
+            } else {
+                if (document.exitFullscreen) { await document.exitFullscreen(); }
+                else if (document.webkitExitFullscreen) { await document.webkitExitFullscreen(); }
+                if (screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
+                iconFullscreen.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>'; 
+            }
+        });
+
+        // Picture in Picture (Fixed for all browsers)
+        btnPip.addEventListener('click', async () => {
+            try {
+                if (document.pictureInPictureElement) { 
+                    await document.exitPictureInPicture(); 
+                } 
+                else if (video.requestPictureInPicture) { 
+                    await video.requestPictureInPicture(); 
+                } 
+                else if (video.webkitSetPresentationMode) { 
+                    // Fallback for Safari / iOS Mobile
+                    video.webkitSetPresentationMode(video.webkitPresentationMode === 'picture-in-picture' ? 'inline' : 'picture-in-picture');
+                } else {
+                    alert("PiP is not supported on this browser.");
+                }
+            } catch (err) { console.log("PiP Error:", err); }
+        });
+
+        // Lock / Unlock Screen
+        let isLocked = false;
+        btnLock.addEventListener('click', () => {
+            isLocked = !isLocked;
+            if (isLocked) {
+                videoContainer.classList.add('locked');
+                iconLock.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>'; 
+            } else {
+                videoContainer.classList.remove('locked');
+                iconLock.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>'; 
+            }
+        });
+
+        // Aspect Ratio (5 Modes)
+        const aspectModes = ['contain', 'cover', 'fill', 'scale-down', 'none'];
+        const aspectNames = ['FIT TO SCREEN', 'ZOOM (COVER)', 'STRETCH (FILL)', 'SCALE DOWN', 'ORIGINAL SIZE'];
+        let aspectIndex = 0;
+        
+        let toastTimeout;
+        const showToast = (message) => {
+            toastMsg.innerText = message;
+            toastMsg.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => toastMsg.classList.remove('show'), 2000);
+        };
+
+        btnAspect.addEventListener('click', () => {
+            aspectIndex = (aspectIndex + 1) % aspectModes.length;
+            video.style.objectFit = aspectModes[aspectIndex];
+            showToast(aspectNames[aspectIndex]);
+            
+            // Icon feedback
+            if (aspectModes[aspectIndex] === 'contain') {
+                iconAspect.innerHTML = '<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>'; 
+            } else if (aspectModes[aspectIndex] === 'fill') {
+                iconAspect.innerHTML = '<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/>'; 
+            } else {
+                iconAspect.innerHTML = '<path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z"/>'; 
+            }
+        });
+
+        // Back button
+        btnBack.addEventListener('click', () => {
+            if (document.fullscreenElement) { 
+                document.exitFullscreen(); 
+                if (screen.orientation && screen.orientation.unlock) { screen.orientation.unlock(); }
+            }
+        });
+
+        // --- Timeline Logic ---
+        const formatTime = (timeInSeconds) => {
+            if(isNaN(timeInSeconds) || timeInSeconds === Infinity) return "LIVE";
+            const h = Math.floor(timeInSeconds / 3600);
+            const m = Math.floor((timeInSeconds % 3600) / 60);
+            const s = Math.floor(timeInSeconds % 60);
+            if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        };
+
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+
+        video.addEventListener('timeupdate', () => {
+            if (video.duration !== Infinity && !isNaN(video.duration)) {
+                const percentage = (video.currentTime / video.duration) * 100;
+                progressBar.value = percentage;
+                currentTimeEl.innerText = formatTime(video.currentTime);
+                totalTimeEl.innerText = formatTime(video.duration);
+            } else {
+                progressBar.value = 100;
+                currentTimeEl.innerText = "LIVE";
+                totalTimeEl.innerText = "LIVE";
+            }
+        });
+
+        progressBar.addEventListener('input', (e) => {
+            if (video.duration !== Infinity && !isNaN(video.duration)) {
+                video.currentTime = (e.target.value / 100) * video.duration;
+            }
+        });
+
+        // --- TV Channel Logic ---
+        let hls; 
+        let allChannels = []; 
+        let currentPlayingId = null;
+
+        function playVideo(url, id) {
+            loadingOverlay.classList.remove('hidden');
+
+            currentPlayingId = id;
+            document.querySelectorAll('.channel-card').forEach(card => {
+                card.classList.remove('active');
+                if(card.dataset.id === id) card.classList.add('active');
+            });
+
+            if (Hls.isSupported()) {
+                if (hls) hls.destroy(); 
+                hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () { 
+                    video.play().catch(e => console.log("Autoplay blocked", e)); 
+                    iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function () { 
+                    video.play().catch(e => console.log("Autoplay blocked", e)); 
+                    iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                });
+            }
+        }
+
+        function loadUserChannels(channels) {
+            const container = document.getElementById('user-channel-list');
+            container.innerHTML = '';
+            if(channels.length === 0) {
+                container.innerHTML = '<p style="color: #666; width: 100%; text-align: center;">No channels found.</p>';
+                return;
+            }
+            channels.forEach(ch => {
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                if(ch.id === currentPlayingId) card.classList.add('active');
+                card.dataset.id = ch.id;
+                
+                card.onclick = () => {
+                    playVideo(ch.url, ch.id);
+                    // Prevent page jump
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                
+                card.innerHTML = `
+                    <img src="${ch.logo}" alt="${ch.name}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'">
+                    <p>${ch.name}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function searchChannel() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allChannels.filter(ch => ch.name.toLowerCase().includes(query));
+            loadUserChannels(filtered);
+        }
+
+        db.ref('channels').on('value', (snapshot) => {
+            allChannels = [];
+            snapshot.forEach((child) => {
+                allChannels.push({ id: child.key, ...child.val() });
+            });
+            loadUserChannels(allChannels);
+
+            if(allChannels.length > 0 && !video.src && !currentPlayingId) {
+                playVideo(allChannels[0].url, allChannels[0].id);
+            }
+        });
+
+        db.ref('settings/notice').on('value', (snapshot) => {
+            document.getElementById('user-notice').innerText = snapshot.val() || "Welcome to RK LIVE TV! Watch your favorite channels without interruption.";
+        });
+    </script>
+</body>
+</html>
