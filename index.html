@@ -94,8 +94,6 @@
         #youtube-container iframe { width: 100%; height: 100%; border: none; transition: transform 0.3s ease; transform-origin: center; pointer-events: auto; }
         
         #yt-overlay-click { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 45; display: none; cursor: pointer; }
-        
-        /* Ad Shield Layer */
         #ad-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 48; display: none; background: transparent; cursor: pointer; }
 
         #video-watermark { position: absolute; top: 15px; right: 15px; z-index: 55; display: none; align-items: center; gap: 5px; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); pointer-events: none; user-select: none; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); }
@@ -173,6 +171,7 @@
         .filter-container h3 { font-size: 15px; color: #fff; font-weight: bold; margin: 0; }
         .category-select { background: #16161a; color: #00d2ff; border: 1px solid #2c2c35; padding: 8px 15px; border-radius: 20px; outline: none; font-size: 13px; font-weight: bold; cursor: pointer; }
 
+        /* Horizontal Slider for Channels */
         .channel-scroll-container { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 20px 15px; gap: 15px; background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; }
         .channel-scroll-container::-webkit-scrollbar { display: none; } 
         
@@ -190,6 +189,10 @@
         .playstore-text span:last-child { font-size: 18px; font-weight: bold; }
 
         .ad-container { width: 100%; display: none; justify-content: center; align-items: center; margin: 10px 0; min-height: 60px; overflow: hidden; background: #0f0f13; }
+        
+        /* Category Title for Playlists */
+        .cat-title-wrap { background: #111a22; padding: 8px 15px; border-left: 4px solid #00d2ff; margin-top: 15px; }
+        .cat-title-wrap h4 { margin: 0; font-size: 15px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
 
         @media (max-width: 600px) {
             .navbar { justify-content: space-between; padding: 8px 10px; }
@@ -198,11 +201,6 @@
             .channel-card, .event-card { width: 110px; } .channel-card img, .event-card img { height: 60px; }
             #video-watermark { top: 10px; right: 10px; font-size: 12px; }
             #video-watermark span.tv { font-size: 10px; padding: 1px 4px; }
-        }
-        @media (min-width: 1024px) { 
-            .channel-scroll-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; overflow-x: hidden; padding: 30px; }
-            .channel-card, .event-card { width: 100%; padding: 15px; } .channel-card img, .event-card img { height: 90px; }
-            .search-container { max-width: 350px; }
         }
     </style>
 </head>
@@ -244,7 +242,7 @@
             
             <div class="search-container">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-box tv-focusable" placeholder="Search channel..." id="searchInput" onkeyup="renderChannels()" tabindex="0">
+                <input type="text" class="search-box tv-focusable" placeholder="Search channel..." id="searchInput" onkeyup="renderCustomChannels()" tabindex="0">
             </div>
         </header>
 
@@ -273,13 +271,9 @@
                 <p id="mc-status">Starting Soon...</p>
             </div>
 
-            <!-- YouTube & Embed Container -->
             <div id="youtube-container"></div>
-            <!-- Cross-origin Click Interceptor -->
             <div id="yt-overlay-click"></div>
-            <!-- Smart Ad Shield for Embeds -->
             <div id="ad-shield"></div>
-            <!-- HTML5 Native Video -->
             <video id="video-player" playsinline preload="auto"></video>
             
             <div id="brightness-overlay"></div>
@@ -304,7 +298,6 @@
                             <button class="control-btn tv-focusable" id="btn-aspect" tabindex="0">
                                 <svg viewBox="0 0 24 24" id="icon-aspect"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
                             </button>
-                            <!-- PiP Button -->
                             <button class="control-btn tv-focusable" id="btn-pip" tabindex="0">
                                 <svg viewBox="0 0 24 24" id="icon-pip"><path d="M19 7h-8v6h8V7zm2-4H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14z"/></svg>
                             </button>
@@ -319,7 +312,7 @@
                 </div>
             </div>
         </div>
-    </div> <!-- /Sticky Wrapper -->
+    </div> 
 
     <div class="notice-container">
         <div class="notice-badge">NOTICE</div>
@@ -328,23 +321,18 @@
 
     <div id="ad-banner-1" class="ad-container"></div>
 
+    <!-- Live Events Section -->
     <div id="live-events-wrapper" style="display:none;">
         <div class="filter-container">
-            <h3>⚽ FIFA WORLD CUP 2026 LIVE MATCHES</h3>
+            <h3>⚽ LIVE MATCHES</h3>
         </div>
         <div class="channel-scroll-container" id="user-events-list"></div>
     </div>
 
-    <div id="playlist-wrapper" style="display:none;">
-        <div class="filter-container">
-            <h3>📋 M3U8 Playlist Channels</h3>
-        </div>
-        <div class="channel-scroll-container" id="playlist-channels-list"></div>
-    </div>
-
+    <!-- Custom Channels Section -->
     <div class="filter-container">
-        <h3>📺 Categories</h3>
-        <select id="user-category-filter" class="category-select tv-focusable" onchange="renderChannels()" tabindex="0">
+        <h3>📺 Custom Channels</h3>
+        <select id="user-category-filter" class="category-select tv-focusable" onchange="renderCustomChannels()" tabindex="0">
             <option value="all">All Channels</option>
             <option value="sports">⚽ Sports</option>
             <option value="news">📰 News</option>
@@ -353,9 +341,13 @@
             <option value="others">🔹 Others</option>
         </select>
     </div>
-
     <div class="channel-scroll-container" id="user-channel-list">
         <p style="color: #666; width: 100%; text-align: center;">Loading super fast...</p>
+    </div>
+
+    <!-- Playlist M3U Categorized Section -->
+    <div id="playlist-wrapper">
+        <!-- Playlists will render here dynamically categorized -->
     </div>
 
     <div id="ad-banner-2" class="ad-container"></div>
@@ -388,12 +380,31 @@
 
         const FIREBASE_DB_URL = "https://my-digital-store-917ee-default-rtdb.firebaseio.com";
 
-        let allChannels = [], allEvents = [], allPlaylistChannels = [], isInitialLoad = true;
+        let allCustomChannels = [], allEvents = [], allPlaylistChannels = [], isInitialLoad = true;
         let currentStreamType = 'm3u8'; 
         let ytPlayer = null; 
 
+        // 1. Visitor Tracking (REST API - No connection limits)
+        async function logVisitorREST() {
+            const d = new Date();
+            const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+            if(localStorage.getItem('visited_today') !== todayStr) {
+                try {
+                    let res = await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`);
+                    let current = await res.json() || 0;
+                    await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`, {
+                        method: 'PUT',
+                        body: JSON.stringify(current + 1)
+                    });
+                    localStorage.setItem('visited_today', todayStr);
+                } catch(e) { console.error("Visitor logging failed"); }
+            }
+        }
+        window.onload = function() { logVisitorREST(); };
+
         function onYouTubeIframeAPIReady() { }
 
+        // Clock Logic
         function updateFlip(id, val) {
             const el = document.getElementById(id); const current = el.getAttribute('data-value');
             if (current === val) return; el.setAttribute('data-value', val);
@@ -409,88 +420,59 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        async function parseM3UFile(url) {
-            try {
-                let response = await fetch(url).catch(()=>null);
-                if (!response || !response.ok) {
-                    response = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url)).catch(()=>null);
-                }
-
-                if(!response) return [];
-                
-                const text = await response.text();
-                const lines = text.split('\n');
-                let channels = [];
-                let currentChannel = {};
-                
-                lines.forEach(line => {
-                    line = line.trim();
-                    if (line.startsWith('#EXTINF:')) {
-                        const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-                        const nameMatch = line.match(/,(.+)$/);
-                        currentChannel = {
-                            name: nameMatch ? nameMatch[1].trim() : 'Unknown Channel',
-                            logo: logoMatch ? logoMatch[1] : 'https://via.placeholder.com/150/ffffff/000000?text=TV',
-                            type: 'm3u8'
-                        };
-                    } else if (line && !line.startsWith('#')) {
-                        currentChannel.url = line;
-                        currentChannel.id = 'm3u_' + Math.random().toString(36).substr(2, 9);
-                        channels.push(currentChannel);
-                        currentChannel = {};
-                    }
-                });
-                return channels;
-            } catch (err) { console.error("M3U Error:", err); return []; }
-        }
-
+        // 2. Data Fetching (100% REST API to bypass 60k limit)
         async function fetchFirebaseData() {
             try {
-                const [channelsRes, settingsRes, eventsRes, playlistsRes] = await Promise.all([
+                // Fetching everything in parallel without holding any websocket connections!
+                const [channelsRes, settingsRes, eventsRes, m3uRes] = await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/channels.json`), 
                     fetch(`${FIREBASE_DB_URL}/settings.json`), 
                     fetch(`${FIREBASE_DB_URL}/liveEvents.json`),
-                    fetch(`${FIREBASE_DB_URL}/playlists.json`).catch(()=>null) 
+                    fetch(`${FIREBASE_DB_URL}/m3uData/channels.json`) // New synced M3U Data
                 ]);
-                const channelsObj = await channelsRes.json(); const settingsObj = await settingsRes.json(); 
-                const eventsObj = await eventsRes.json(); const playlistsObj = playlistsRes ? await playlistsRes.json() : null;
+                
+                const channelsObj = await channelsRes.json(); 
+                const settingsObj = await settingsRes.json(); 
+                const eventsObj = await eventsRes.json(); 
+                const m3uObj = await m3uRes.json();
 
-                allEvents = []; if (eventsObj) { Object.keys(eventsObj).forEach(key => allEvents.push({ id: key, ...eventsObj[key] })); allEvents.sort((a, b) => (a.order || 0) - (b.order || 0)); } renderEvents();
+                // Live Events
+                allEvents = []; 
+                if (eventsObj) { 
+                    Object.keys(eventsObj).forEach(key => allEvents.push({ id: key, ...eventsObj[key] })); 
+                    allEvents.sort((a, b) => (a.order || 0) - (b.order || 0)); 
+                } 
+                renderEvents();
                 
-                allPlaylistChannels = [];
-                let regularChannels = [];
-                
+                // Custom Channels
+                allCustomChannels = [];
                 if (channelsObj) {
-                    for (const key in channelsObj) {
-                        const ch = { id: key, ...channelsObj[key] };
-                        if (ch.type === 'playlist') {
-                            const parsed = await parseM3UFile(ch.url);
-                            allPlaylistChannels = [...allPlaylistChannels, ...parsed];
-                        } else {
-                            regularChannels.push(ch);
-                        }
-                    }
+                    Object.keys(channelsObj).forEach(key => {
+                        allCustomChannels.push({ id: key, ...channelsObj[key] });
+                    });
+                    allCustomChannels.sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
-                
-                if (playlistsObj) {
-                    for (const key in playlistsObj) {
-                        const item = playlistsObj[key];
-                        if (item.url && (item.type === 'playlist' || item.url.includes('.m3u'))) {
-                            const parsed = await parseM3UFile(item.url);
-                            allPlaylistChannels = [...allPlaylistChannels, ...parsed];
-                        }
-                    }
-                }
+                renderCustomChannels();
 
-                allChannels = regularChannels.sort((a, b) => (a.order || 0) - (b.order || 0)); 
-                renderChannels();
+                // M3U Playlist Channels (Admin Synced)
+                allPlaylistChannels = [];
+                if (m3uObj) {
+                    Object.keys(m3uObj).forEach(key => {
+                        allPlaylistChannels.push({ id: key, ...m3uObj[key] });
+                    });
+                    allPlaylistChannels.sort((a, b) => (a.order || 0) - (b.order || 0));
+                }
                 renderPlaylistChannels();
 
+                // Autoplay Initial
                 if (isInitialLoad) {
-                    if (allEvents.length > 0) playMatch(allEvents[0].id); else if (allChannels.length > 0) playVideo(allChannels[0].url, allChannels[0].id, allChannels[0].type || 'm3u8');
+                    if (allEvents.length > 0) playMatch(allEvents[0].id); 
+                    else if (allCustomChannels.length > 0) playVideo(allCustomChannels[0].url, allCustomChannels[0].id, allCustomChannels[0].type || 'm3u8');
+                    else if (allPlaylistChannels.length > 0) playVideo(allPlaylistChannels[0].url, allPlaylistChannels[0].id, 'm3u8');
                     isInitialLoad = false;
                 }
 
+                // Apply Settings
                 if (settingsObj) {
                     document.getElementById('user-notice').textContent = settingsObj.notice || "Welcome to RK LIVE TV!";
                     const btn = document.getElementById('app-download-btn');
@@ -507,8 +489,11 @@
                 }
             } catch (error) { console.error("Data Fetch Error:", error); }
         }
-        fetchFirebaseData(); setInterval(fetchFirebaseData, 180000);
+        
+        fetchFirebaseData(); 
+        setInterval(fetchFirebaseData, 180000); // Reload data every 3 mins
 
+        // UI & Player Variables
         const video = document.getElementById('video-player'); const videoContainer = document.getElementById('videoContainer');
         const playerControls = document.getElementById('playerControls'); const youtubeContainer = document.getElementById('youtube-container');
         const ytOverlayClick = document.getElementById('yt-overlay-click'); const loadingOverlay = document.getElementById('loading-overlay');
@@ -596,7 +581,6 @@
             }
         });
 
-        // 🟢 FIX: Any Native Fullscreen (including embed's own button) Auto-Rotates to Landscape!
         function handleFullscreenChange() {
             const iconFs = document.getElementById('icon-fullscreen');
             if (document.fullscreenElement || document.webkitFullscreenElement) {
@@ -607,7 +591,6 @@
                 if(iconFs) iconFs.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
             }
         }
-        // Listener for the entire document captures Native iframe fullscreen too
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
@@ -662,26 +645,22 @@
         let currentPlayingId = null; let matchCountdownInterval = null; const tickAudio = document.getElementById('tick-sound');
         function stopAllTimers() { clearInterval(matchCountdownInterval); tickAudio.pause(); tickAudio.currentTime = 0; document.getElementById('match-countdown-container').style.display = 'none'; }
 
-        // 🟢 FIX: Allow native fullscreen on the iframe so the embed's own fullscreen button works
         function prepareEmbedCode(html) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const iframes = doc.querySelectorAll('iframe');
-            
             iframes.forEach(ifr => {
-                // Ensure native fullscreen is allowed
                 ifr.setAttribute('allowfullscreen', 'true');
                 ifr.setAttribute('webkitallowfullscreen', 'true');
                 ifr.setAttribute('mozallowfullscreen', 'true');
-                
                 ifr.style.width = '100%';
                 ifr.style.height = '100%';
                 ifr.style.border = 'none';
             });
-            
             return doc.body.innerHTML;
         }
 
+        // Live Events Render
         function renderEvents() {
             const wrapper = document.getElementById('live-events-wrapper'); const container = document.getElementById('user-events-list');
             if(allEvents.length === 0) { wrapper.style.display = 'none'; return; }
@@ -697,19 +676,41 @@
             });
         }
 
+        // 3. New Fetched M3U Playlist Categories Render (Dynamic Horizontal Scroll)
         function renderPlaylistChannels() {
             const wrapper = document.getElementById('playlist-wrapper');
-            const container = document.getElementById('playlist-channels-list');
-            if(allPlaylistChannels.length === 0) { wrapper.style.display = 'none'; return; }
-            wrapper.style.display = 'block'; container.innerHTML = '';
+            if(allPlaylistChannels.length === 0) { wrapper.innerHTML = ''; return; }
             
-            allPlaylistChannels.forEach(ch => {
-                const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
-                if(ch.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { playVideo(ch.url, ch.id, ch.type || 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-                card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
-                container.appendChild(card);
-            });
+            // Group channels by category
+            const grouped = allPlaylistChannels.reduce((acc, ch) => {
+                const cat = (ch.category || 'others').toLowerCase();
+                if (!acc[cat]) acc[cat] = [];
+                acc[cat].push(ch);
+                return acc;
+            }, {});
+
+            wrapper.innerHTML = ''; // Clear previous
+
+            for (const cat in grouped) {
+                // Category Title Box
+                const catHtml = `
+                    <div class="cat-title-wrap">
+                        <h4>📂 ${cat} CHANNELS</h4>
+                    </div>
+                    <div class="channel-scroll-container">
+                        ${grouped[cat].map(ch => {
+                            let isActive = ch.id === currentPlayingId ? 'active' : '';
+                            return `
+                                <div class="channel-card tv-focusable ${isActive}" tabindex="0" data-id="${ch.id}" onclick="playVideo('${ch.url}', '${ch.id}', 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' });">
+                                    <img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'">
+                                    <p>${ch.name}</p>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                wrapper.innerHTML += catHtml;
+            }
         }
 
         function playMatch(id) {
@@ -735,7 +736,7 @@
                     stopAllTimers(); youtubeContainer.style.display = 'block'; loadingOverlay.classList.remove('hidden');
                     youtubeContainer.innerHTML = prepareEmbedCode(match.embedCode || `<h3 style="color:white; text-align:center; padding:50px;">Stream Link not added yet.</h3>`);
                     ytOverlayClick.style.display = 'none'; 
-                    adShield.style.display = 'block'; // Turn on Ad Shield
+                    adShield.style.display = 'block'; 
                     setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
                 }
             }
@@ -747,7 +748,8 @@
         function playVideo(url, id, type) {
             stopAllTimers(); currentPlayingId = id; hideControls(); loadingOverlay.classList.remove('hidden'); hideWatermark(); currentStreamType = type || 'm3u8';
             document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.channel-card[data-id="${id}"]`)?.classList.add('active');
+            let activeCard = document.querySelector(`.channel-card[data-id="${id}"]`);
+            if(activeCard) activeCard.classList.add('active');
 
             if (type === 'youtube') {
                 adShield.style.display = 'none';
@@ -772,7 +774,7 @@
                 if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; 
                 ytOverlayClick.style.display = 'none'; 
                 youtubeContainer.innerHTML = prepareEmbedCode(url); 
-                adShield.style.display = 'block'; // Turn on Ad Shield
+                adShield.style.display = 'block'; 
                 setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
             } else {
                 adShield.style.display = 'none';
@@ -788,11 +790,11 @@
             } setTimeout(() => videoContainer.focus(), 300);
         }
 
-        function renderChannels() {
+        function renderCustomChannels() {
             const q = document.getElementById('searchInput').value.toLowerCase(); const c = document.getElementById('user-category-filter').value;
             const container = document.getElementById('user-channel-list'); container.innerHTML = '';
-            let filtered = allChannels.filter(ch => (ch.name.toLowerCase().includes(q)) && (c === 'all' || (ch.category || 'others') === c));
-            if(filtered.length === 0) { container.innerHTML = '<p style="color: #666; width: 100%; text-align: center; padding: 20px;">No channels found.</p>'; return; }
+            let filtered = allCustomChannels.filter(ch => (ch.name.toLowerCase().includes(q)) && (c === 'all' || (ch.category || 'others') === c));
+            if(filtered.length === 0) { container.innerHTML = '<p style="color: #666; width: 100%; text-align: center; padding: 20px;">No custom channels found.</p>'; return; }
             filtered.forEach(ch => {
                 const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
                 if(ch.id === currentPlayingId) card.classList.add('active');
