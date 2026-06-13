@@ -91,11 +91,12 @@
         video { width: 100%; height: 100%; outline: none; display: block; transition: object-fit 0.3s ease; }
         
         #youtube-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 40; display: none; background: #000; overflow: hidden; }
-        /* Fix for YouTube Aspect Ratio */
         #youtube-container iframe { width: 100%; height: 100%; border: none; transition: transform 0.3s ease; transform-origin: center; pointer-events: auto; }
         
-        /* Click interceptor for Custom UI */
         #yt-overlay-click { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 45; display: none; cursor: pointer; }
+        
+        /* Ad Shield Layer */
+        #ad-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 48; display: none; background: transparent; cursor: pointer; }
 
         #video-watermark { position: absolute; top: 15px; right: 15px; z-index: 55; display: none; align-items: center; gap: 5px; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); pointer-events: none; user-select: none; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); }
         #video-watermark span.live { color: rgba(255, 0, 85, 0.6); }
@@ -159,10 +160,9 @@
         /* LOCK SCREEN BEHAVIOR */
         .video-wrapper.locked .player-controls { background: transparent !important; }
         .video-wrapper.locked .controls-top .left, 
-        .video-wrapper.locked .controls-top .right .control-btn:not(#btn-lock), 
         .video-wrapper.locked .controls-bottom, 
         .video-wrapper.locked .center-controls { display: none !important; }
-        .video-wrapper.locked #yt-overlay-click { pointer-events: none; }
+        .video-wrapper.locked .controls-top .right .control-btn:not(#btn-lock) { display: none !important; }
 
         /* Other Web Layout */
         .notice-container { display: flex; align-items: center; background: #131318; border-bottom: 1px solid #222; }
@@ -182,7 +182,6 @@
         .channel-card p, .event-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; }
         .event-badge { position: absolute; top: 0; right: 0; background: #e74c3c; color: white; font-size: 9px; font-weight: bold; padding: 3px 6px; border-radius: 0 10px 0 10px; animation: blink 1.5s infinite; }
 
-        /* PLAYSTORE BUTTON & ADS RESTORED */
         .playstore-btn { display: none; background: #000; color: white; margin: 20px auto; max-width: 300px; text-decoration: none; border-radius: 10px; border: 1px solid #444; padding: 10px 20px; align-items: center; gap: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); outline: none; justify-content: center; }
         .playstore-btn:hover, .playstore-btn:focus { background: #111; border-color: #00d2ff; }
         .playstore-btn svg { width: 35px; height: 35px; }
@@ -209,7 +208,6 @@
 </head>
 <body>
 
-    <!-- Sticky Wrapper for Navbar and Video -->
     <div class="sticky-header-video">
         <header class="navbar">
             <div class="logo-time-container">
@@ -279,6 +277,8 @@
             <div id="youtube-container"></div>
             <!-- Cross-origin Click Interceptor -->
             <div id="yt-overlay-click"></div>
+            <!-- Smart Ad Shield for Embeds -->
+            <div id="ad-shield"></div>
             <!-- HTML5 Native Video -->
             <video id="video-player" playsinline preload="auto"></video>
             
@@ -326,15 +326,20 @@
         <marquee class="notice-marquee" id="user-notice">Loading notice...</marquee>
     </div>
 
-    <!-- Firebase Ad Banner 1 Restored -->
     <div id="ad-banner-1" class="ad-container"></div>
 
-    <!-- Live Matches Section -->
     <div id="live-events-wrapper" style="display:none;">
         <div class="filter-container">
             <h3>⚽ FIFA WORLD CUP 2026 LIVE MATCHES</h3>
         </div>
         <div class="channel-scroll-container" id="user-events-list"></div>
+    </div>
+
+    <div id="playlist-wrapper" style="display:none;">
+        <div class="filter-container">
+            <h3>📋 M3U8 Playlist Channels</h3>
+        </div>
+        <div class="channel-scroll-container" id="playlist-channels-list"></div>
     </div>
 
     <div class="filter-container">
@@ -353,10 +358,8 @@
         <p style="color: #666; width: 100%; text-align: center;">Loading super fast...</p>
     </div>
 
-    <!-- Firebase Ad Banner 2 Restored -->
     <div id="ad-banner-2" class="ad-container"></div>
 
-    <!-- Playstore App Download Restored -->
     <a id="app-download-btn" class="playstore-btn tv-focusable" href="#" target="_blank" tabindex="0">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.7 20.3L15.3 13.5L11.5 9.7L3.7 20.3Z" fill="#EA4335"/>
@@ -370,15 +373,12 @@
         </div>
     </a>
 
-    <!-- Popup Ads Restored -->
     <div id="popup-ads-container"></div>
 
     <audio id="tick-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
 
     <script>
-        // ==========================================
-        // SECURITY: ANTI-THEFT & DEVTOOLS BLOCK
-        // ==========================================
+        // Security logic
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
@@ -388,13 +388,12 @@
 
         const FIREBASE_DB_URL = "https://my-digital-store-917ee-default-rtdb.firebaseio.com";
 
-        let allChannels = [], allEvents = [], isInitialLoad = true;
+        let allChannels = [], allEvents = [], allPlaylistChannels = [], isInitialLoad = true;
         let currentStreamType = 'm3u8'; 
         let ytPlayer = null; 
 
         function onYouTubeIframeAPIReady() { }
 
-        // Clock Logic
         function updateFlip(id, val) {
             const el = document.getElementById(id); const current = el.getAttribute('data-value');
             if (current === val) return; el.setAttribute('data-value', val);
@@ -410,23 +409,88 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // Data Fetch & REST API
+        async function parseM3UFile(url) {
+            try {
+                let response = await fetch(url).catch(()=>null);
+                if (!response || !response.ok) {
+                    response = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(url)).catch(()=>null);
+                }
+
+                if(!response) return [];
+                
+                const text = await response.text();
+                const lines = text.split('\n');
+                let channels = [];
+                let currentChannel = {};
+                
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (line.startsWith('#EXTINF:')) {
+                        const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                        const nameMatch = line.match(/,(.+)$/);
+                        currentChannel = {
+                            name: nameMatch ? nameMatch[1].trim() : 'Unknown Channel',
+                            logo: logoMatch ? logoMatch[1] : 'https://via.placeholder.com/150/ffffff/000000?text=TV',
+                            type: 'm3u8'
+                        };
+                    } else if (line && !line.startsWith('#')) {
+                        currentChannel.url = line;
+                        currentChannel.id = 'm3u_' + Math.random().toString(36).substr(2, 9);
+                        channels.push(currentChannel);
+                        currentChannel = {};
+                    }
+                });
+                return channels;
+            } catch (err) { console.error("M3U Error:", err); return []; }
+        }
+
         async function fetchFirebaseData() {
             try {
-                const [channelsRes, settingsRes, eventsRes] = await Promise.all([
-                    fetch(`${FIREBASE_DB_URL}/channels.json`), fetch(`${FIREBASE_DB_URL}/settings.json`), fetch(`${FIREBASE_DB_URL}/liveEvents.json`)
+                const [channelsRes, settingsRes, eventsRes, playlistsRes] = await Promise.all([
+                    fetch(`${FIREBASE_DB_URL}/channels.json`), 
+                    fetch(`${FIREBASE_DB_URL}/settings.json`), 
+                    fetch(`${FIREBASE_DB_URL}/liveEvents.json`),
+                    fetch(`${FIREBASE_DB_URL}/playlists.json`).catch(()=>null) 
                 ]);
-                const channelsObj = await channelsRes.json(); const settingsObj = await settingsRes.json(); const eventsObj = await eventsRes.json();
+                const channelsObj = await channelsRes.json(); const settingsObj = await settingsRes.json(); 
+                const eventsObj = await eventsRes.json(); const playlistsObj = playlistsRes ? await playlistsRes.json() : null;
 
                 allEvents = []; if (eventsObj) { Object.keys(eventsObj).forEach(key => allEvents.push({ id: key, ...eventsObj[key] })); allEvents.sort((a, b) => (a.order || 0) - (b.order || 0)); } renderEvents();
-                allChannels = []; if (channelsObj) { Object.keys(channelsObj).forEach(key => allChannels.push({ id: key, ...channelsObj[key] })); allChannels.sort((a, b) => (a.order || 0) - (b.order || 0)); } renderChannels();
+                
+                allPlaylistChannels = [];
+                let regularChannels = [];
+                
+                if (channelsObj) {
+                    for (const key in channelsObj) {
+                        const ch = { id: key, ...channelsObj[key] };
+                        if (ch.type === 'playlist') {
+                            const parsed = await parseM3UFile(ch.url);
+                            allPlaylistChannels = [...allPlaylistChannels, ...parsed];
+                        } else {
+                            regularChannels.push(ch);
+                        }
+                    }
+                }
+                
+                if (playlistsObj) {
+                    for (const key in playlistsObj) {
+                        const item = playlistsObj[key];
+                        if (item.url && (item.type === 'playlist' || item.url.includes('.m3u'))) {
+                            const parsed = await parseM3UFile(item.url);
+                            allPlaylistChannels = [...allPlaylistChannels, ...parsed];
+                        }
+                    }
+                }
+
+                allChannels = regularChannels.sort((a, b) => (a.order || 0) - (b.order || 0)); 
+                renderChannels();
+                renderPlaylistChannels();
 
                 if (isInitialLoad) {
                     if (allEvents.length > 0) playMatch(allEvents[0].id); else if (allChannels.length > 0) playVideo(allChannels[0].url, allChannels[0].id, allChannels[0].type || 'm3u8');
                     isInitialLoad = false;
                 }
 
-                // Restore Ads & Settings Logic
                 if (settingsObj) {
                     document.getElementById('user-notice').textContent = settingsObj.notice || "Welcome to RK LIVE TV!";
                     const btn = document.getElementById('app-download-btn');
@@ -445,13 +509,13 @@
         }
         fetchFirebaseData(); setInterval(fetchFirebaseData, 180000);
 
-        // Player Controls Elements
         const video = document.getElementById('video-player'); const videoContainer = document.getElementById('videoContainer');
         const playerControls = document.getElementById('playerControls'); const youtubeContainer = document.getElementById('youtube-container');
         const ytOverlayClick = document.getElementById('yt-overlay-click'); const loadingOverlay = document.getElementById('loading-overlay');
         const brightnessOverlay = document.getElementById('brightness-overlay'); const btnPlayPause = document.getElementById('btn-playpause');
         const iconPlay = document.getElementById('icon-play'); const toastMsg = document.getElementById('toast-msg');
         const videoWatermark = document.getElementById('video-watermark');
+        const adShield = document.getElementById('ad-shield');
 
         function hideWatermark() { videoWatermark.style.display = 'none'; }
         function showWatermark() { videoWatermark.style.display = 'flex'; }
@@ -462,9 +526,16 @@
         const showControls = () => { if(!loadingOverlay.classList.contains('hidden') && document.getElementById('match-countdown-container').style.display !== 'flex') return; playerControls.classList.add('active'); isControlsVisible = true; resetControlTimer(); };
         const resetControlTimer = () => { clearTimeout(controlTimeout); controlTimeout = setTimeout(hideControls, 3000); };
 
+        adShield.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.style.display = 'none'; 
+            showToast("🛡️ Popup Ad Blocked! Tap again to play.");
+        });
+
         videoContainer.addEventListener('click', (e) => {
             document.getElementById('tick-sound').play().then(()=>document.getElementById('tick-sound').pause()).catch(e=>{});
             if(e.target.closest('.control-btn') || e.target.closest('.play-pause-btn')) { resetControlTimer(); return; }
+            if (isLocked) { if (isControlsVisible) hideControls(); else showControls(); return; }
             if (isControlsVisible) hideControls(); else showControls();
         });
 
@@ -474,7 +545,7 @@
 
         btnPlayPause.addEventListener('click', (e) => {
             e.stopPropagation();
-            if(currentStreamType === 'embed') { showToast("Play/Pause control works only on Video/YT directly"); return; }
+            if(currentStreamType === 'embed') { showToast("Use the embed player's internal controls"); return; }
             if (currentStreamType === 'youtube' && ytPlayer) {
                 let state = ytPlayer.getPlayerState();
                 if (state === YT.PlayerState.PLAYING) { ytPlayer.pauseVideo(); iconPlay.innerHTML = '<path d="M8 5v14l11-7z"/>'; showControls(); } 
@@ -485,9 +556,8 @@
             }
         });
 
-        // 1. Fixed YouTube Aspect Ratio
         const aspectModes = ['contain', 'cover', 'fill', 'scale-down', 'none'];
-        const ytScaleModes = ['scale(1)', 'scale(1.35)', 'scale(1.35, 1.5)', 'scale(0.8)', 'scale(1)']; // Emulate zoom for YouTube
+        const ytScaleModes = ['scale(1)', 'scale(1.35)', 'scale(1.35, 1.5)', 'scale(0.8)', 'scale(1)']; 
         const aspectIconsList = ['<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>','<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>','<path d="M2 5h20v14H2z M4 7h16v10H4z M9 9h6v6H9z"/>','<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7V7h10v10z"/>','<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 10h4v4h-4z"/>'];
         let aspectIndex = 0;
         
@@ -495,55 +565,68 @@
             e.stopPropagation(); aspectIndex = (aspectIndex + 1) % aspectModes.length;
             video.style.objectFit = aspectModes[aspectIndex]; 
             
-            // YT Transform logic for Aspect Ratio
             let ytIframe = document.querySelector('#youtube-container iframe');
             if (ytIframe) ytIframe.style.transform = ytScaleModes[aspectIndex];
-
+            
             document.getElementById('icon-aspect').innerHTML = aspectIconsList[aspectIndex];
             showToast("ASPECT CHANGED: " + aspectModes[aspectIndex].toUpperCase()); resetControlTimer();
         });
 
-        // 2. Fixed PiP Support logic
         document.getElementById('btn-pip').addEventListener('click', async (e) => {
             e.stopPropagation();
             if (currentStreamType === 'youtube' || currentStreamType === 'embed') {
                 showToast("⚠️ PiP Support is Browser-Restricted for YouTube & Embeds.");
             } else {
-                try {
-                    if (video !== document.pictureInPictureElement) await video.requestPictureInPicture();
-                    else await document.exitPictureInPicture();
-                } catch(err) { showToast("PiP failed! Browser may not support it."); }
+                try { if (video !== document.pictureInPictureElement) await video.requestPictureInPicture(); else await document.exitPictureInPicture(); } catch(err) {}
             }
             resetControlTimer();
         });
 
-        // 3. Perfect Lock Button
         let isLocked = false;
         document.getElementById('btn-lock').addEventListener('click', (e) => {
             e.stopPropagation(); isLocked = !isLocked; const iconLock = document.getElementById('icon-lock');
             if (isLocked) { 
                 videoContainer.classList.add('locked'); 
                 iconLock.innerHTML = '<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>'; 
-                hideControls(); showToast("SCREEN LOCKED");
+                showToast("SCREEN LOCKED"); resetControlTimer();
             } else { 
                 videoContainer.classList.remove('locked'); 
                 iconLock.innerHTML = '<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>'; 
-                showControls(); showToast("SCREEN UNLOCKED");
+                showToast("SCREEN UNLOCKED"); resetControlTimer();
             }
         });
 
-        document.getElementById('btn-fullscreen').addEventListener('click', async (e) => {
-            e.stopPropagation(); const iconFs = document.getElementById('icon-fullscreen');
-            if (!document.fullscreenElement) {
-                try { if (videoContainer.requestFullscreen) await videoContainer.requestFullscreen(); else if (videoContainer.webkitRequestFullscreen) await videoContainer.webkitRequestFullscreen(); if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape"); } catch (err) {}
-                iconFs.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>'; 
+        // 🟢 FIX: Any Native Fullscreen (including embed's own button) Auto-Rotates to Landscape!
+        function handleFullscreenChange() {
+            const iconFs = document.getElementById('icon-fullscreen');
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock("landscape").catch(e=>{}); } catch (err) {}
+                if(iconFs) iconFs.innerHTML = '<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>';
             } else {
-                if (document.exitFullscreen) await document.exitFullscreen(); else if (document.webkitExitFullscreen) await document.webkitExitFullscreen(); if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-                iconFs.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>'; 
-            } resetControlTimer();
+                try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (err) {}
+                if(iconFs) iconFs.innerHTML = '<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>';
+            }
+        }
+        // Listener for the entire document captures Native iframe fullscreen too
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+
+        document.getElementById('btn-fullscreen').addEventListener('click', async (e) => {
+            e.stopPropagation(); 
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                try { 
+                    if (videoContainer.requestFullscreen) await videoContainer.requestFullscreen(); 
+                    else if (videoContainer.webkitRequestFullscreen) await videoContainer.webkitRequestFullscreen(); 
+                } catch (err) {}
+            } else {
+                try {
+                    if (document.exitFullscreen) await document.exitFullscreen(); 
+                    else if (document.webkitExitFullscreen) await document.webkitExitFullscreen(); 
+                } catch(err) {}
+            } 
+            resetControlTimer();
         });
 
-        // Swipe Controls
         let startY = 0, startX = 0, startVol = 1, startBright = 0, isSwipingDrag = false;
         videoContainer.addEventListener('touchstart', (e) => { 
             if(!isLocked){ 
@@ -576,9 +659,28 @@
         }, {passive: false});
         videoContainer.addEventListener('touchend', () => { setTimeout(() => { document.getElementById('swipe-indicator').classList.remove('show'); isSwipingDrag = false; }, 300); });
 
-        // Match Logic
         let currentPlayingId = null; let matchCountdownInterval = null; const tickAudio = document.getElementById('tick-sound');
         function stopAllTimers() { clearInterval(matchCountdownInterval); tickAudio.pause(); tickAudio.currentTime = 0; document.getElementById('match-countdown-container').style.display = 'none'; }
+
+        // 🟢 FIX: Allow native fullscreen on the iframe so the embed's own fullscreen button works
+        function prepareEmbedCode(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const iframes = doc.querySelectorAll('iframe');
+            
+            iframes.forEach(ifr => {
+                // Ensure native fullscreen is allowed
+                ifr.setAttribute('allowfullscreen', 'true');
+                ifr.setAttribute('webkitallowfullscreen', 'true');
+                ifr.setAttribute('mozallowfullscreen', 'true');
+                
+                ifr.style.width = '100%';
+                ifr.style.height = '100%';
+                ifr.style.border = 'none';
+            });
+            
+            return doc.body.innerHTML;
+        }
 
         function renderEvents() {
             const wrapper = document.getElementById('live-events-wrapper'); const container = document.getElementById('user-events-list');
@@ -595,8 +697,23 @@
             });
         }
 
+        function renderPlaylistChannels() {
+            const wrapper = document.getElementById('playlist-wrapper');
+            const container = document.getElementById('playlist-channels-list');
+            if(allPlaylistChannels.length === 0) { wrapper.style.display = 'none'; return; }
+            wrapper.style.display = 'block'; container.innerHTML = '';
+            
+            allPlaylistChannels.forEach(ch => {
+                const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
+                if(ch.id === currentPlayingId) card.classList.add('active');
+                card.onclick = () => { playVideo(ch.url, ch.id, ch.type || 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
+                container.appendChild(card);
+            });
+        }
+
         function playMatch(id) {
-            stopAllTimers(); currentPlayingId = id; hideWatermark(); currentStreamType = 'embed'; ytOverlayClick.style.display = 'block';
+            stopAllTimers(); currentPlayingId = id; hideWatermark(); currentStreamType = 'embed'; ytOverlayClick.style.display = 'none'; 
             document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
             document.querySelector(`.event-card[data-id="${id}"]`)?.classList.add('active');
             if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none';
@@ -616,7 +733,9 @@
                     document.getElementById('mc-status').innerHTML = "Match is starting soon..."; document.getElementById('mc-status').style.color = "#f39c12"; tickAudio.play().catch(e => {}); 
                 } else { 
                     stopAllTimers(); youtubeContainer.style.display = 'block'; loadingOverlay.classList.remove('hidden');
-                    youtubeContainer.innerHTML = match.embedCode || `<h3 style="color:white; text-align:center; padding:50px;">Stream Link not added yet.</h3>`;
+                    youtubeContainer.innerHTML = prepareEmbedCode(match.embedCode || `<h3 style="color:white; text-align:center; padding:50px;">Stream Link not added yet.</h3>`);
+                    ytOverlayClick.style.display = 'none'; 
+                    adShield.style.display = 'block'; // Turn on Ad Shield
                     setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
                 }
             }
@@ -631,6 +750,7 @@
             document.querySelector(`.channel-card[data-id="${id}"]`)?.classList.add('active');
 
             if (type === 'youtube') {
+                adShield.style.display = 'none';
                 if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') { setTimeout(() => playVideo(url, id, type), 500); return; }
                 if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; ytOverlayClick.style.display = 'block';
                 let ytId = extractYouTubeID(url);
@@ -649,9 +769,13 @@
                     });
                 } else { ytPlayer.loadVideoById(ytId); }
             } else if (type === 'embed') {
-                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; ytOverlayClick.style.display = 'block';
-                youtubeContainer.innerHTML = url; setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
+                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; 
+                ytOverlayClick.style.display = 'none'; 
+                youtubeContainer.innerHTML = prepareEmbedCode(url); 
+                adShield.style.display = 'block'; // Turn on Ad Shield
+                setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
             } else {
+                adShield.style.display = 'none';
                 youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none'; video.style.display = 'block'; ytOverlayClick.style.display = 'none';
                 if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
                 if (Hls.isSupported()) { 
