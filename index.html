@@ -35,7 +35,6 @@
         /* =========================================
            STICKY HEADER & VIDEO WRAPPER 
            ========================================= */
-        /* স্টিকি কন্টেইনার যা হেডার এবং ভিডিওকে স্ক্রিনের উপরে ধরে রাখবে */
         .sticky-header-video { 
             position: sticky; 
             top: 0; 
@@ -102,12 +101,12 @@
         .search-box:focus { border-color: #00d2ff !important; }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.6; pointer-events: none; }
 
-        /* Video Player & Overlays */
+        /* Video Player & Overlays (Compact/Flat Size for PC) */
         .video-wrapper { 
             position: relative; 
             width: 100%; 
-            max-width: 900px; /* পিসিতে ভিডিও প্লেয়ারের সর্বোচ্চ মাপ */
-            max-height: 60vh; /* পিসির স্ক্রিনে প্লেয়ারটি যেন পুরোটা জুড়ে না যায় */
+            max-width: 800px; /* ভিডিওর সর্বোচ্চ চওড়া মাপ */
+            max-height: 45vh; /* ভিডিওর উচ্চতা কমিয়ে দেওয়া হয়েছে যাতে চ্যানেলগুলো ভালো দেখা যায় */
             margin: 0 auto; /* প্লেয়ারটিকে সেন্টারে রাখার জন্য */
             aspect-ratio: 16/9; 
             background: #000; 
@@ -200,14 +199,19 @@
         .filter-container h3 { font-size: 15px; color: #fff; font-weight: bold; margin: 0; }
         .category-select { background: #16161a; color: #00d2ff; border: 1px solid #2c2c35; padding: 8px 15px; border-radius: 20px; outline: none; font-size: 13px; font-weight: bold; cursor: pointer; }
 
-        /* Horizontal Slider for Channels */
-        .channel-scroll-container { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 20px 15px; gap: 15px; background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; }
+        /* Horizontal Slider for Channels (Drag to scroll enabled) */
+        .channel-scroll-container { 
+            display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 20px 15px; gap: 15px; 
+            background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; 
+            cursor: grab; /* পিসিতে মাউস পয়েন্টার হাতের মতো দেখাবে */
+        }
+        .channel-scroll-container:active { cursor: grabbing; } /* ক্লিক করে ড্র্যাগ করার সময় */
         .channel-scroll-container::-webkit-scrollbar { display: none; } 
         
         .channel-card, .event-card { flex: 0 0 auto; width: 130px; background: #1a1a21; border-radius: 12px; padding: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; outline: none; position: relative;}
         .channel-card.active, .event-card.active { border-color: #00d2ff; background: #22222a; box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
-        .channel-card img, .event-card img { width: 100%; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px;}
-        .channel-card p, .event-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; }
+        .channel-card img, .event-card img { width: 100%; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px; pointer-events: none; /* ড্র্যাগ করার সময় ইমেজ যেন সমস্যা না করে */}
+        .channel-card p, .event-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; pointer-events: none;}
         .event-badge { position: absolute; top: 0; right: 0; background: #e74c3c; color: white; font-size: 9px; font-weight: bold; padding: 3px 6px; border-radius: 0 10px 0 10px; animation: blink 1.5s infinite; }
 
         .playstore-btn { display: none; background: #000; color: white; margin: 20px auto; max-width: 300px; text-decoration: none; border-radius: 10px; border: 1px solid #444; padding: 10px 20px; align-items: center; gap: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); outline: none; justify-content: center; }
@@ -422,6 +426,41 @@
         let allCustomChannels = [], allEvents = [], allPlaylistChannels = [], isInitialLoad = true;
         let currentStreamType = 'm3u8'; 
         let ytPlayer = null; 
+        let isMouseDragging = false; // পিসিতে স্লাইড করার সময় ক্লিক ব্লক করার জন্য
+
+        // Drag to scroll logic for PC/TV mouse users
+        function attachDragToScroll() {
+            const sliders = document.querySelectorAll('.channel-scroll-container');
+            sliders.forEach(slider => {
+                if (slider.dataset.dragAttached) return;
+                slider.dataset.dragAttached = 'true';
+
+                let isDown = false; let startX; let scrollLeft;
+
+                slider.addEventListener('mousedown', (e) => {
+                    isDown = true; isMouseDragging = false;
+                    slider.style.scrollBehavior = 'auto'; // স্লাইডের সময় স্মুথনেস অফ করা
+                    startX = e.pageX - slider.offsetLeft;
+                    scrollLeft = slider.scrollLeft;
+                });
+
+                slider.addEventListener('mouseleave', () => { isDown = false; slider.style.scrollBehavior = 'smooth'; });
+                
+                slider.addEventListener('mouseup', () => { 
+                    isDown = false; slider.style.scrollBehavior = 'smooth'; 
+                    setTimeout(() => isMouseDragging = false, 50); // মাউস ছাড়ার পর অল্প সময় ক্লিক ব্লক রাখা
+                });
+
+                slider.addEventListener('mousemove', (e) => {
+                    if(!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - slider.offsetLeft;
+                    const walk = (x - startX) * 2; // স্লাইড স্পিড (২ গুন ফাস্ট)
+                    if (Math.abs(walk) > 5) isMouseDragging = true; // যদি ৫ পিক্সেলের বেশি নড়ে তবেই ড্র্যাগ কাউন্ট হবে
+                    slider.scrollLeft = scrollLeft - walk;
+                });
+            });
+        }
 
         // 1. Visitor Tracking (REST API - No connection limits)
         async function logVisitorREST() {
@@ -709,10 +748,11 @@
                 let badge = now < startTs ? `<span class="event-badge" style="background:#f39c12; color:#000;">UPCOMING</span>` : (now >= startTs && now <= endTs) ? `<span class="event-badge">LIVE NOW</span>` : `<span class="event-badge" style="background:#2c3e50; animation:none;">END MATCH</span>`;
                 const card = document.createElement('div'); card.className = 'event-card tv-focusable'; card.tabIndex = 0; card.dataset.id = match.id;
                 if(match.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { playMatch(match.id); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                card.onclick = () => { if(isMouseDragging) return; playMatch(match.id); window.scrollTo({ top: 0, behavior: 'smooth' }); };
                 card.innerHTML = `${badge}<img src="${match.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=MATCH'"><p>${match.matchName}</p>`;
                 container.appendChild(card);
             });
+            attachDragToScroll();
         }
 
         // 3. New Fetched M3U Playlist Categories Render (Dynamic Horizontal Scroll)
@@ -720,7 +760,6 @@
             const wrapper = document.getElementById('playlist-wrapper');
             if(allPlaylistChannels.length === 0) { wrapper.innerHTML = ''; return; }
             
-            // Group channels by category
             const grouped = allPlaylistChannels.reduce((acc, ch) => {
                 const cat = (ch.category || 'others').toLowerCase();
                 if (!acc[cat]) acc[cat] = [];
@@ -728,10 +767,9 @@
                 return acc;
             }, {});
 
-            wrapper.innerHTML = ''; // Clear previous
+            wrapper.innerHTML = ''; 
 
             for (const cat in grouped) {
-                // Category Title Box
                 const catHtml = `
                     <div class="cat-title-wrap">
                         <h4>📂 ${cat} CHANNELS</h4>
@@ -740,7 +778,7 @@
                         ${grouped[cat].map(ch => {
                             let isActive = ch.id === currentPlayingId ? 'active' : '';
                             return `
-                                <div class="channel-card tv-focusable ${isActive}" tabindex="0" data-id="${ch.id}" onclick="playVideo('${ch.url}', '${ch.id}', 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' });">
+                                <div class="channel-card tv-focusable ${isActive}" tabindex="0" data-id="${ch.id}" onclick="if(isMouseDragging) return; playVideo('${ch.url}', '${ch.id}', 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' });">
                                     <img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'">
                                     <p>${ch.name}</p>
                                 </div>
@@ -750,6 +788,7 @@
                 `;
                 wrapper.innerHTML += catHtml;
             }
+            attachDragToScroll();
         }
 
         function playMatch(id) {
@@ -837,10 +876,11 @@
             filtered.forEach(ch => {
                 const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
                 if(ch.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { playVideo(ch.url, ch.id, ch.type || 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                card.onclick = () => { if(isMouseDragging) return; playVideo(ch.url, ch.id, ch.type || 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
                 card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
                 container.appendChild(card);
             });
+            attachDragToScroll();
         }
     </script>
 </body>
