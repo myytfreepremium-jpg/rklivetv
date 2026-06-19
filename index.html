@@ -17,19 +17,11 @@
         /* Base Styles */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
         
-        html { background-color: #050505; } /* পিসিতে স্ক্রিনের বাইরের অংশের কালার */
-        
         body { 
             background-color: #0b0b0f; 
             color: #ffffff; 
             overflow-x: hidden; 
             width: 100%; 
-            max-width: 480px; /* মোবাইলের সাইজ করার জন্য */
-            margin: 0 auto; /* পিসিতে স্ক্রিনের একদম মাঝখানে রাখার জন্য */
-            min-height: 100vh;
-            border-left: 1px solid #1f1f25;
-            border-right: 1px solid #1f1f25;
-            box-shadow: 0 0 30px rgba(0,0,0,0.8);
             -webkit-tap-highlight-color: transparent; 
         }
 
@@ -43,7 +35,16 @@
         /* =========================================
            STICKY HEADER & VIDEO WRAPPER 
            ========================================= */
-        .sticky-header-video { position: sticky; top: 0; z-index: 100; width: 100%; background: #0b0b0f; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        /* স্টিকি কন্টেইনার যা হেডার এবং ভিডিওকে স্ক্রিনের উপরে ধরে রাখবে */
+        .sticky-header-video { 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            width: 100%; 
+            background: #0b0b0f; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.8); 
+            border-bottom: 1px solid #1f1f25;
+        }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 10px 15px; background-color: #0f0f13; border-bottom: 1px solid #1f1f25; width: 100%; gap: 10px; }
         .logo-time-container { display: flex; align-items: center; justify-content: flex-start; gap: 10px; width: auto; flex-wrap: nowrap; }
@@ -96,13 +97,26 @@
         @keyframes flipTop { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(-90deg); } }
         @keyframes flipBottom { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0deg); } }
 
-        .search-container { position: relative; flex-grow: 1; max-width: 200px; }
+        .search-container { position: relative; flex-grow: 1; max-width: 250px; }
         .search-box { background: #16161a; border: 1px solid #2c2c35; color: white; padding: 8px 15px 8px 30px; border-radius: 15px; outline: none; width: 100%; font-size: 12px; transition: 0.3s; }
         .search-box:focus { border-color: #00d2ff !important; }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.6; pointer-events: none; }
 
         /* Video Player & Overlays */
-        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .video-wrapper { 
+            position: relative; 
+            width: 100%; 
+            max-width: 900px; /* পিসিতে ভিডিও প্লেয়ারের সর্বোচ্চ মাপ */
+            max-height: 60vh; /* পিসির স্ক্রিনে প্লেয়ারটি যেন পুরোটা জুড়ে না যায় */
+            margin: 0 auto; /* প্লেয়ারটিকে সেন্টারে রাখার জন্য */
+            aspect-ratio: 16/9; 
+            background: #000; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer; 
+        }
         video { width: 100%; height: 100%; outline: none; display: block; transition: object-fit 0.3s ease; }
         
         #youtube-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 40; display: none; background: #000; overflow: hidden; }
@@ -209,6 +223,15 @@
         .cat-title-wrap { background: #111a22; padding: 8px 15px; border-left: 4px solid #00d2ff; margin-top: 15px; }
         .cat-title-wrap h4 { margin: 0; font-size: 15px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* Responsive UI for PC / Tablets */
+        @media (min-width: 768px) {
+            .channel-card, .event-card { width: 160px; padding: 15px; } 
+            .channel-card img, .event-card img { height: 90px; }
+            .channel-card p, .event-card p { font-size: 14px; }
+            .filter-container h3 { font-size: 18px; }
+            .search-container { max-width: 300px; }
+        }
+
         @media (max-width: 600px) {
             .navbar { justify-content: space-between; padding: 8px 10px; }
             .logo-time-container { width: 100%; gap: 5px; justify-content: space-between; }
@@ -216,6 +239,7 @@
             .channel-card, .event-card { width: 110px; } .channel-card img, .event-card img { height: 60px; }
             #video-watermark { top: 10px; right: 10px; font-size: 12px; }
             #video-watermark span.tv { font-size: 10px; padding: 1px 4px; }
+            .video-wrapper { max-height: none; } /* মোবাইলে সাধারণ হাইট থাকবে */
         }
     </style>
 </head>
