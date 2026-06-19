@@ -16,7 +16,22 @@
     <style>
         /* Base Styles */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; }
-        body { background-color: #0b0b0f; color: #ffffff; overflow-x: hidden; width: 100%; -webkit-tap-highlight-color: transparent; }
+        
+        html { background-color: #050505; } /* পিসিতে স্ক্রিনের বাইরের অংশের কালার */
+        
+        body { 
+            background-color: #0b0b0f; 
+            color: #ffffff; 
+            overflow-x: hidden; 
+            width: 100%; 
+            max-width: 480px; /* মোবাইলের সাইজ করার জন্য */
+            margin: 0 auto; /* পিসিতে স্ক্রিনের একদম মাঝখানে রাখার জন্য */
+            min-height: 100vh;
+            border-left: 1px solid #1f1f25;
+            border-right: 1px solid #1f1f25;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            -webkit-tap-highlight-color: transparent; 
+        }
 
         :focus { outline: none !important; box-shadow: none !important; }
 
