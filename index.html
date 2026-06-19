@@ -7,7 +7,7 @@
     <!-- Security Header -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>RK LIVE TV</title>
+    <title>RK LIVE TV - Premium Streaming</title>
     
     <!-- HLS & YouTube API -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -32,26 +32,18 @@
         .tv-mode .channel-card:focus, .tv-mode .event-card:focus { border-color: #00d2ff !important; background: #22222a !important; box-shadow: 0 0 20px rgba(0, 210, 255, 0.5) !important; transform: scale(1.08); }
         .tv-mode .control-btn:focus, .tv-mode .play-pause-btn:focus { outline: 3px solid #ff0055 !important; box-shadow: 0 0 15px #ff0055 !important; background: rgba(255, 0, 85, 0.3) !important; }
 
-        /* =========================================
-           STICKY HEADER & VIDEO WRAPPER 
-           ========================================= */
-        .sticky-header-video { 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            width: 100%; 
-            background: #0b0b0f; 
-            box-shadow: 0 8px 25px rgba(0,0,0,0.8); 
-            border-bottom: 1px solid #1f1f25;
-        }
-        
+        /* STICKY HEADER & VIDEO WRAPPER */
+        .sticky-header-video { position: sticky; top: 0; z-index: 100; width: 100%; background: #0b0b0f; box-shadow: 0 8px 25px rgba(0,0,0,0.8); border-bottom: 1px solid #1f1f25; }
         .navbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 10px 15px; background-color: #0f0f13; border-bottom: 1px solid #1f1f25; width: 100%; gap: 10px; }
         .logo-time-container { display: flex; align-items: center; justify-content: flex-start; gap: 10px; width: auto; flex-wrap: nowrap; }
-        
         .logo-wrapper { display: flex; align-items: center; gap: 5px; cursor: pointer; }
         .logo-text { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 4px; letter-spacing: 1px; }
         .logo-text span.live { color: #ff0055; }
         .logo-text span.tv { background-color: #00d2ff; color: #000; padding: 2px 6px; border-radius: 6px; font-size: 14px; font-weight: bold; }
+
+        /* Header link button (1st Website) */
+        .site-link-btn { background: #1a1a21; color: #00d2ff; text-decoration: none; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; border: 1px solid #00d2ff; white-space: nowrap; transition: 0.2s; }
+        .site-link-btn:hover { background: #00d2ff; color: #000; }
 
         /* Animated Header Logo */
         .loader {
@@ -74,24 +66,25 @@
         @keyframes roundness { 0%, 100% { filter: contrast(15); } 20%, 40% { filter: contrast(3); } 60% { filter: contrast(15); } }
         @keyframes colorize { 0%, 100% { filter: hue-rotate(0deg); } 20% { filter: hue-rotate(-30deg); } 40% { filter: hue-rotate(-60deg); } 60% { filter: hue-rotate(-90deg); } 80% { filter: hue-rotate(-45deg); } }
 
-        /* Flip Clock Mini */
+        /* Updated Flip Clock - Bigger and Thinner Gap */
         .clock-wrapper { display: flex; flex-direction: row; align-items: center; gap: 5px; }
-        .date-display { font-size: 8px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; background: #1a1a21; padding: 3px 6px; border-radius: 12px; border: 1px solid #333; }
+        .date-display { font-size: 8px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; background: #1a1a21; padding: 4px 6px; border-radius: 12px; border: 1px solid #333; }
         .date-display .day { color: #00d2ff; margin-right: 2px; }
         .date-display .date { color: #ffffff; }
 
-        .flip-clock { display: flex; gap: 2px; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; }
-        .flip-unit { position: relative; width: 16px; height: 22px; background: #16161a; border-radius: 3px; font-size: 12px; color: #00d2ff; border: 1px solid #333; }
-        .flip-top, .flip-bottom, .flip-flap-top, .flip-flap-bottom { position: absolute; left: 0; width: 100%; height: 11px; background: #22222a; overflow: hidden; backface-visibility: hidden; }
-        .flip-top { top: 0; border-radius: 3px 3px 0 0; }
-        .flip-bottom { bottom: 0; border-radius: 0 0 3px 3px; }
-        .flip-flap-top { top: 0; transform-origin: bottom; animation: flipTop 0.3s ease-in forwards; z-index: 2; }
-        .flip-flap-bottom { bottom: 0; transform-origin: top; transform: rotateX(90deg); animation: flipBottom 0.3s ease-out 0.3s forwards; z-index: 2; }
-        .flip-unit span { position: absolute; left: 0; width: 100%; height: 22px; line-height: 22px; text-align: center; display: block; }
+        .flip-clock { display: flex; gap: 3px; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; }
+        .flip-unit { position: relative; width: 22px; height: 30px; background: #16161a; border-radius: 4px; font-size: 16px; color: #00d2ff; border: 1px solid #333; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .flip-top, .flip-bottom, .flip-flap-top, .flip-flap-bottom { position: absolute; left: 0; width: 100%; height: 15px; background: #22222a; overflow: hidden; backface-visibility: hidden; }
+        .flip-top { top: 0; border-radius: 4px 4px 0 0; }
+        .flip-bottom { bottom: 0; border-radius: 0 0 4px 4px; }
+        .flip-flap-top { top: 0; transform-origin: bottom; animation: flipTop 0.15s ease-in forwards; z-index: 2; }
+        .flip-flap-bottom { bottom: 0; transform-origin: top; transform: rotateX(90deg); animation: flipBottom 0.15s ease-out 0.15s forwards; z-index: 2; }
+        .flip-unit span { position: absolute; left: 0; width: 100%; height: 30px; line-height: 30px; text-align: center; display: block; letter-spacing: 1px;}
         .flip-top span, .flip-flap-top span { top: 0; }
-        .flip-bottom span, .flip-flap-bottom span { top: -11px; }
-        .flip-unit::after { content: ''; position: absolute; left: 0; top: 11px; width: 100%; height: 1px; background: rgba(0, 0, 0, 0.8); z-index: 5; margin-top: -0.5px;}
-        .flip-ampm { font-size: 10px; color: #ff0055; margin-left: 2px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; }
+        .flip-bottom span, .flip-flap-bottom span { top: -15px; }
+        /* Thinner gap line */
+        .flip-unit::after { content: ''; position: absolute; left: 0; top: 15px; width: 100%; height: 1px; background: rgba(0, 0, 0, 0.9); z-index: 5; margin-top: -0.5px; box-shadow: 0 1px 0 rgba(255,255,255,0.05);}
+        .flip-ampm { font-size: 12px; color: #ff0055; margin-left: 3px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; }
 
         @keyframes flipTop { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(-90deg); } }
         @keyframes flipBottom { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0deg); } }
@@ -101,20 +94,11 @@
         .search-box:focus { border-color: #00d2ff !important; }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; opacity: 0.6; pointer-events: none; }
 
-        /* Video Player & Overlays (Compact/Flat Size for PC) */
+        /* Video Player & Overlays */
         .video-wrapper { 
-            position: relative; 
-            width: 100%; 
-            max-width: 800px; /* ভিডিওর সর্বোচ্চ চওড়া মাপ */
-            max-height: 45vh; /* ভিডিওর উচ্চতা কমিয়ে দেওয়া হয়েছে যাতে চ্যানেলগুলো ভালো দেখা যায় */
-            margin: 0 auto; /* প্লেয়ারটিকে সেন্টারে রাখার জন্য */
-            aspect-ratio: 16/9; 
-            background: #000; 
-            overflow: hidden; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            cursor: pointer; 
+            position: relative; width: 100%; max-width: 800px; max-height: 45vh; margin: 0 auto; 
+            aspect-ratio: 16/9; background: #000; overflow: hidden; display: flex; 
+            justify-content: center; align-items: center; cursor: pointer; 
         }
         video { width: 100%; height: 100%; outline: none; display: block; transition: object-fit 0.3s ease; }
         
@@ -127,16 +111,6 @@
         #video-watermark { position: absolute; top: 15px; right: 15px; z-index: 55; display: none; align-items: center; gap: 5px; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); pointer-events: none; user-select: none; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); }
         #video-watermark span.live { color: rgba(255, 0, 85, 0.6); }
         #video-watermark span.tv { background-color: rgba(0, 210, 255, 0.4); color: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-
-        #match-countdown-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0b0b0f; z-index: 45; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; text-align: center; border: 2px solid #222; }
-        .mc-brand { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; }
-        .mc-brand .rk { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .mc-brand .live { color: #ff0055; text-shadow: 0 0 15px rgba(255,0,85,0.8); }
-        .mc-brand .tv { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 8px; font-size: 16px; box-shadow: 0 0 15px rgba(0,210,255,0.8); }
-        #mc-logo { height: 50px; margin-bottom: 10px; object-fit: contain; }
-        #mc-title { color: #00a8ff; font-size: 18px; margin-bottom: 10px; font-weight: bold; }
-        #mc-timer { font-size: 30px; font-weight: bold; font-family: monospace; color: #e74c3c; background: #000; padding: 5px 20px; border-radius: 8px; border: 1px solid #333; letter-spacing: 2px; }
-        #mc-status { margin-top: 10px; font-weight: bold; font-size: 14px; }
 
         .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #00d2ff; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 100; pointer-events: none; border: 1px solid #00d2ff; }
         .toast.show { opacity: 1; }
@@ -196,24 +170,31 @@
         .notice-marquee { color: #00d2ff; font-size: 14px; padding-right: 10px; }
 
         .filter-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 12px 15px; background-color: #0b0b0f; border-bottom: 1px solid #1a1a21; gap: 10px; }
-        .filter-container h3 { font-size: 15px; color: #fff; font-weight: bold; margin: 0; }
+        .filter-container h3 { font-size: 15px; color: #fff; font-weight: bold; margin: 0; text-transform: uppercase;}
         .category-select { background: #16161a; color: #00d2ff; border: 1px solid #2c2c35; padding: 8px 15px; border-radius: 20px; outline: none; font-size: 13px; font-weight: bold; cursor: pointer; }
 
-        /* Horizontal Slider for Channels (Drag to scroll enabled) */
+        /* Horizontal Slider for Channels */
         .channel-scroll-container { 
             display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 20px 15px; gap: 15px; 
-            background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; 
-            cursor: grab; /* পিসিতে মাউস পয়েন্টার হাতের মতো দেখাবে */
+            background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; 
         }
-        .channel-scroll-container:active { cursor: grabbing; } /* ক্লিক করে ড্র্যাগ করার সময় */
+        .channel-scroll-container:active { cursor: grabbing; } 
         .channel-scroll-container::-webkit-scrollbar { display: none; } 
         
         .channel-card, .event-card { flex: 0 0 auto; width: 130px; background: #1a1a21; border-radius: 12px; padding: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; outline: none; position: relative;}
         .channel-card.active, .event-card.active { border-color: #00d2ff; background: #22222a; box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
-        .channel-card img, .event-card img { width: 100%; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px; pointer-events: none; /* ড্র্যাগ করার সময় ইমেজ যেন সমস্যা না করে */}
-        .channel-card p, .event-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; pointer-events: none;}
-        .event-badge { position: absolute; top: 0; right: 0; background: #e74c3c; color: white; font-size: 9px; font-weight: bold; padding: 3px 6px; border-radius: 0 10px 0 10px; animation: blink 1.5s infinite; }
+        .channel-card img, .event-card img { width: 100%; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px; pointer-events: none; }
+        .channel-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; pointer-events: none;}
+        .event-badge { position: absolute; top: 0; right: 0; background: #e74c3c; color: white; font-size: 9px; font-weight: bold; padding: 3px 6px; border-radius: 0 10px 0 10px; animation: blink 1.5s infinite; z-index: 2;}
 
+        /* Match Card Updates */
+        .event-card { width: 150px; }
+        .event-card img { height: 85px; object-fit: cover; }
+        .match-time-txt { font-size: 11px !important; color: #00d2ff !important; margin-bottom: 2px !important; text-align: center !important; font-weight: bold; }
+        .match-countdown { font-family: 'Courier New', Courier, monospace; font-size: 11px !important; font-weight: bold; margin-bottom: 4px !important; text-align: center !important; color: #f39c12; }
+        .match-title-txt { font-size: 12px !important; text-align: center !important; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: bold; line-height: 1.2; width: 100%; color: #fff;}
+
+        /* Original Playstore Button */
         .playstore-btn { display: none; background: #000; color: white; margin: 20px auto; max-width: 300px; text-decoration: none; border-radius: 10px; border: 1px solid #444; padding: 10px 20px; align-items: center; gap: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); outline: none; justify-content: center; }
         .playstore-btn:hover, .playstore-btn:focus { background: #111; border-color: #00d2ff; }
         .playstore-btn svg { width: 35px; height: 35px; }
@@ -221,17 +202,33 @@
         .playstore-text span:first-child { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; }
         .playstore-text span:last-child { font-size: 18px; font-weight: bold; }
 
+        /* Original Ad Containers */
         .ad-container { width: 100%; display: none; justify-content: center; align-items: center; margin: 10px 0; min-height: 60px; overflow: hidden; background: #0f0f13; }
         
-        /* Category Title for Playlists */
         .cat-title-wrap { background: #111a22; padding: 8px 15px; border-left: 4px solid #00d2ff; margin-top: 15px; }
         .cat-title-wrap h4 { margin: 0; font-size: 15px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Responsive UI for PC / Tablets */
+        /* Stream Servers Popup Modal */
+        #stream-popup-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(5px);
+        }
+        #stream-popup {
+            background: #111a22; border: 2px solid #00d2ff; border-radius: 15px; width: 90%; max-width: 400px;
+            padding: 20px; text-align: center; display: flex; flex-direction: column; max-height: 85vh; box-shadow: 0 10px 30px rgba(0, 210, 255, 0.3);
+        }
+        #popup-match-title { color: #fff; margin-bottom: 15px; font-size: 16px; border-bottom: 1px solid #222; padding-bottom: 10px;}
+        #popup-streams-list { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding: 5px 5px 10px 5px; max-height: 350px; scrollbar-width: thin; scrollbar-color: #00d2ff #111a22;}
+        .popup-server-btn { background: #1a1a21; border: 1px solid #2c2c35; color: #fff; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: left; display: flex; align-items: center; justify-content: space-between;}
+        .popup-server-btn:hover { background: #00d2ff; color: #000; border-color: #00d2ff; transform: scale(1.02); }
+        .popup-close-btn { margin-top: 15px; background: #ff0055; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s;}
+        .popup-close-btn:hover { background: #d40047; }
+
+        /* Responsive UI */
         @media (min-width: 768px) {
-            .channel-card, .event-card { width: 160px; padding: 15px; } 
-            .channel-card img, .event-card img { height: 90px; }
-            .channel-card p, .event-card p { font-size: 14px; }
+            .channel-card { width: 160px; padding: 15px; } 
+            .channel-card img { height: 90px; }
+            .channel-card p { font-size: 14px; }
             .filter-container h3 { font-size: 18px; }
             .search-container { max-width: 300px; }
         }
@@ -240,10 +237,10 @@
             .navbar { justify-content: space-between; padding: 8px 10px; }
             .logo-time-container { width: 100%; gap: 5px; justify-content: space-between; }
             .search-container { max-width: 100%; width: 100%; }
-            .channel-card, .event-card { width: 110px; } .channel-card img, .event-card img { height: 60px; }
+            .channel-card { width: 110px; } .channel-card img { height: 60px; }
             #video-watermark { top: 10px; right: 10px; font-size: 12px; }
             #video-watermark span.tv { font-size: 10px; padding: 1px 4px; }
-            .video-wrapper { max-height: none; } /* মোবাইলে সাধারণ হাইট থাকবে */
+            .video-wrapper { max-height: none; }
         }
     </style>
 </head>
@@ -259,6 +256,9 @@
                     </div>
                     <div class="logo-text">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
                 </div>
+
+                <!-- 1st Website Button -->
+                <a href="https://rklived.vercel.app/" target="_blank" class="site-link-btn tv-focusable" tabindex="0">১ম ওয়েবসাইট</a>
 
                 <div class="clock-wrapper">
                     <div class="date-display" id="date-display">
@@ -306,14 +306,6 @@
                 <div class="loading-text">PLEASE WAIT...</div>
             </div>
 
-            <div id="match-countdown-container">
-                <div class="mc-brand"><span class="rk">RK</span><span class="live">LIVE</span><span class="tv">TV</span></div>
-                <img id="mc-logo" src="">
-                <h2 id="mc-title">Match Title</h2>
-                <div id="mc-timer">00:00:00</div>
-                <p id="mc-status">Starting Soon...</p>
-            </div>
-
             <div id="youtube-container"></div>
             <div id="yt-overlay-click"></div>
             <div id="ad-shield"></div>
@@ -357,6 +349,17 @@
         </div>
     </div> 
 
+    <!-- Stream Links Popup Modal -->
+    <div id="stream-popup-overlay">
+        <div id="stream-popup">
+            <h3 id="popup-match-title">Match Title</h3>
+            <div id="popup-streams-list">
+                <!-- Stream buttons will load here dynamically -->
+            </div>
+            <button class="popup-close-btn" onclick="closeStreamPopup()">✖ Close / Back</button>
+        </div>
+    </div>
+
     <div class="notice-container">
         <div class="notice-badge">NOTICE</div>
         <marquee class="notice-marquee" id="user-notice">Loading notice...</marquee>
@@ -364,13 +367,8 @@
 
     <div id="ad-banner-1" class="ad-container"></div>
 
-    <!-- Live Events Section -->
-    <div id="live-events-wrapper" style="display:none;">
-        <div class="filter-container">
-            <h3>⚽ LIVE MATCHES</h3>
-        </div>
-        <div class="channel-scroll-container" id="user-events-list"></div>
-    </div>
+    <!-- Live Events Sections (Dynamic API Categories) -->
+    <div id="live-events-wrapper" style="display:none;"></div>
 
     <!-- Custom Channels Section -->
     <div class="filter-container">
@@ -389,9 +387,7 @@
     </div>
 
     <!-- Playlist M3U Categorized Section -->
-    <div id="playlist-wrapper">
-        <!-- Playlists will render here dynamically categorized -->
-    </div>
+    <div id="playlist-wrapper"></div>
 
     <div id="ad-banner-2" class="ad-container"></div>
 
@@ -413,7 +409,7 @@
     <audio id="tick-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
 
     <script>
-        // Security logic
+        // Security logic (Original)
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
@@ -422,11 +418,14 @@
         };
 
         const FIREBASE_DB_URL = "https://my-digital-store-917ee-default-rtdb.firebaseio.com";
+        const myWebsiteLogo = "https://placehold.co/300x200/1a1a21/00d2ff/png?text=RK+LIVE+TV&font=Montserrat"; 
 
-        let allCustomChannels = [], allEvents = [], allPlaylistChannels = [], isInitialLoad = true;
+        let allCustomChannels = [], allPlaylistChannels = [], isInitialLoad = true;
+        let apiToggles = {}; // Will hold ON/OFF state of sports categories from Firebase
+        
         let currentStreamType = 'm3u8'; 
         let ytPlayer = null; 
-        let isMouseDragging = false; // পিসিতে স্লাইড করার সময় ক্লিক ব্লক করার জন্য
+        let isMouseDragging = false; 
 
         // Drag to scroll logic for PC/TV mouse users
         function attachDragToScroll() {
@@ -439,7 +438,7 @@
 
                 slider.addEventListener('mousedown', (e) => {
                     isDown = true; isMouseDragging = false;
-                    slider.style.scrollBehavior = 'auto'; // স্লাইডের সময় স্মুথনেস অফ করা
+                    slider.style.scrollBehavior = 'auto'; 
                     startX = e.pageX - slider.offsetLeft;
                     scrollLeft = slider.scrollLeft;
                 });
@@ -448,21 +447,21 @@
                 
                 slider.addEventListener('mouseup', () => { 
                     isDown = false; slider.style.scrollBehavior = 'smooth'; 
-                    setTimeout(() => isMouseDragging = false, 50); // মাউস ছাড়ার পর অল্প সময় ক্লিক ব্লক রাখা
+                    setTimeout(() => isMouseDragging = false, 50); 
                 });
 
                 slider.addEventListener('mousemove', (e) => {
                     if(!isDown) return;
                     e.preventDefault();
                     const x = e.pageX - slider.offsetLeft;
-                    const walk = (x - startX) * 2; // স্লাইড স্পিড (২ গুন ফাস্ট)
-                    if (Math.abs(walk) > 5) isMouseDragging = true; // যদি ৫ পিক্সেলের বেশি নড়ে তবেই ড্র্যাগ কাউন্ট হবে
+                    const walk = (x - startX) * 2; 
+                    if (Math.abs(walk) > 5) isMouseDragging = true; 
                     slider.scrollLeft = scrollLeft - walk;
                 });
             });
         }
 
-        // 1. Visitor Tracking (REST API - No connection limits)
+        // Visitor Tracking
         async function logVisitorREST() {
             const d = new Date();
             const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
@@ -470,10 +469,7 @@
                 try {
                     let res = await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`);
                     let current = await res.json() || 0;
-                    await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`, {
-                        method: 'PUT',
-                        body: JSON.stringify(current + 1)
-                    });
+                    await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`, { method: 'PUT', body: JSON.stringify(current + 1) });
                     localStorage.setItem('visited_today', todayStr);
                 } catch(e) { console.error("Visitor logging failed"); }
             }
@@ -482,7 +478,7 @@
 
         function onYouTubeIframeAPIReady() { }
 
-        // Clock Logic
+        // Clock Logic - Perfect Sync
         function updateFlip(id, val) {
             const el = document.getElementById(id); const current = el.getAttribute('data-value');
             if (current === val) return; el.setAttribute('data-value', val);
@@ -490,71 +486,96 @@
         }
         const daysList = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
         function updateClock() {
             const now = new Date(); let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds(); const ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12; h = h ? h : 12; 
             updateFlip('flip-h', h.toString().padStart(2, '0')); updateFlip('flip-m', m.toString().padStart(2, '0')); updateFlip('flip-s', s.toString().padStart(2, '0'));
             document.getElementById('flip-ampm').innerText = ampm;
             document.getElementById('date-display').innerHTML = `<span class="day">${daysList[now.getDay()]},</span> <span class="date">${now.getDate()} ${monthsList[now.getMonth()]} ${now.getFullYear()}</span>`;
         }
-        setInterval(updateClock, 1000); updateClock();
+        
+        function syncClock() {
+            updateClock();
+            const now = new Date();
+            const msToNextSecond = 1000 - now.getMilliseconds();
+            setTimeout(() => { updateClock(); setInterval(updateClock, 1000); }, msToNextSecond);
+        }
+        syncClock(); 
 
-        // 2. Data Fetching (100% REST API to bypass 60k limit)
+        // Match Countdown Timer Updater (Global)
+        setInterval(() => {
+            const now = new Date().getTime();
+            document.querySelectorAll('.match-countdown').forEach(el => {
+                const startTs = parseInt(el.getAttribute('data-start'));
+                const endTs = startTs + (2 * 60 * 60 * 1000); 
+                
+                if (now < startTs) {
+                    let diff = startTs - now;
+                    let d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    let h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    let s = Math.floor((diff % (1000 * 60)) / 1000);
+                    
+                    let timeStr = d > 0 ? `${d}d ` : "";
+                    timeStr += `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                    
+                    el.innerText = `Starts in: ${timeStr}`;
+                    el.style.color = '#f39c12';
+                } else if (now >= startTs && now <= endTs) {
+                    el.innerText = `🔴 LIVE NOW`;
+                    el.style.color = '#ff0055';
+                } else {
+                    el.innerText = `ENDED`;
+                    el.style.color = '#7f8c8d';
+                }
+            });
+        }, 1000);
+
+        // Fetch Firebase Data and Trigger Active API Matches
         async function fetchFirebaseData() {
             try {
-                // Fetching everything in parallel without holding any websocket connections!
-                const [channelsRes, settingsRes, eventsRes, m3uRes] = await Promise.all([
+                const [channelsRes, settingsRes, m3uRes] = await Promise.all([
                     fetch(`${FIREBASE_DB_URL}/channels.json`), 
                     fetch(`${FIREBASE_DB_URL}/settings.json`), 
-                    fetch(`${FIREBASE_DB_URL}/liveEvents.json`),
-                    fetch(`${FIREBASE_DB_URL}/m3uData/channels.json`) // New synced M3U Data
+                    fetch(`${FIREBASE_DB_URL}/m3uData/channels.json`)
                 ]);
                 
                 const channelsObj = await channelsRes.json(); 
                 const settingsObj = await settingsRes.json(); 
-                const eventsObj = await eventsRes.json(); 
                 const m3uObj = await m3uRes.json();
-
-                // Live Events
-                allEvents = []; 
-                if (eventsObj) { 
-                    Object.keys(eventsObj).forEach(key => allEvents.push({ id: key, ...eventsObj[key] })); 
-                    allEvents.sort((a, b) => (a.order || 0) - (b.order || 0)); 
-                } 
-                renderEvents();
                 
                 // Custom Channels
                 allCustomChannels = [];
                 if (channelsObj) {
-                    Object.keys(channelsObj).forEach(key => {
-                        allCustomChannels.push({ id: key, ...channelsObj[key] });
-                    });
+                    Object.keys(channelsObj).forEach(key => { allCustomChannels.push({ id: key, ...channelsObj[key] }); });
                     allCustomChannels.sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
                 renderCustomChannels();
 
-                // M3U Playlist Channels (Admin Synced)
+                // M3U Playlist Channels
                 allPlaylistChannels = [];
                 if (m3uObj) {
-                    Object.keys(m3uObj).forEach(key => {
-                        allPlaylistChannels.push({ id: key, ...m3uObj[key] });
-                    });
+                    Object.keys(m3uObj).forEach(key => { allPlaylistChannels.push({ id: key, ...m3uObj[key] }); });
                     allPlaylistChannels.sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
                 renderPlaylistChannels();
 
                 // Autoplay Initial
                 if (isInitialLoad) {
-                    if (allEvents.length > 0) playMatch(allEvents[0].id); 
-                    else if (allCustomChannels.length > 0) playVideo(allCustomChannels[0].url, allCustomChannels[0].id, allCustomChannels[0].type || 'm3u8');
+                    if (allCustomChannels.length > 0) playVideo(allCustomChannels[0].url, allCustomChannels[0].id, allCustomChannels[0].type || 'm3u8');
                     else if (allPlaylistChannels.length > 0) playVideo(allPlaylistChannels[0].url, allPlaylistChannels[0].id, 'm3u8');
                     isInitialLoad = false;
                 }
 
-                // Apply Settings
+                // Apply Settings (Ads, Notice, Playstore, Toggles)
                 if (settingsObj) {
                     document.getElementById('user-notice').textContent = settingsObj.notice || "Welcome to RK LIVE TV!";
                     const btn = document.getElementById('app-download-btn');
                     if (settingsObj.appUrl && settingsObj.appUrl.trim() !== "") { btn.href = settingsObj.appUrl; btn.style.display = 'flex'; } else btn.style.display = 'none';
+
+                    // API Sports Toggles from Admin
+                    apiToggles = settingsObj.apiSportsToggles || {};
+                    fetchActiveApiMatches(); // Trigger fetching after getting toggles
 
                     if (settingsObj.ads) {
                         const ad = settingsObj.ads;
@@ -568,8 +589,89 @@
             } catch (error) { console.error("Data Fetch Error:", error); }
         }
         
+        // Dynamic API Matching Logic
+        async function fetchActiveApiMatches() {
+            try {
+                // Get all sports categories from API
+                const sportsRes = await fetch('https://streamed.pk/api/sports');
+                const sportsList = await sportsRes.json();
+
+                // Filter only sports that are ON (true) in Firebase
+                const activeSports = sportsList.filter(sport => apiToggles[sport.id] === true);
+                
+                const wrapper = document.getElementById('live-events-wrapper');
+                wrapper.innerHTML = ''; 
+
+                if(activeSports.length === 0) {
+                    wrapper.style.display = 'none';
+                    return;
+                }
+                wrapper.style.display = 'block';
+
+                // Fetch matches for each active sport
+                for (const sport of activeSports) {
+                    const res = await fetch(`https://streamed.pk/api/matches/${sport.id}`);
+                    const matches = await res.json();
+                    
+                    if(matches && matches.length > 0) {
+                        renderSportMatches(sport, matches, wrapper);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching API matches:", err);
+            }
+        }
+
+        // Render Active Sport Sections
+        function renderSportMatches(sport, matches, wrapper) {
+            const sectionHtml = `
+                <div class="filter-container">
+                    <h3>🏆 LIVE ${sport.name}</h3>
+                </div>
+                <div class="channel-scroll-container" id="api-events-${sport.id}"></div>
+            `;
+            wrapper.insertAdjacentHTML('beforeend', sectionHtml);
+            
+            const container = document.getElementById(`api-events-${sport.id}`);
+            const now = new Date().getTime();
+
+            matches.forEach(match => {
+                const startTs = match.date; 
+                const bdDateOptions = { timeZone: 'Asia/Dhaka', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+                const timeStr = new Date(startTs).toLocaleString('bn-BD', bdDateOptions);
+                let badge = now < startTs ? `<span class="event-badge" style="background:#f39c12; color:#000;">UPCOMING</span>` : `<span class="event-badge">LIVE NOW</span>`;
+
+                const card = document.createElement('div'); 
+                card.className = 'event-card tv-focusable'; 
+                card.tabIndex = 0; 
+                card.dataset.id = match.id;
+                if(match.id === currentPlayingId) card.classList.add('active');
+                
+                // Clicking Card opens Modal Popup
+                card.onclick = () => { if(isMouseDragging) return; showStreamPopup(match); };
+
+                // Thumbnail Logic
+                let imgSrc = myWebsiteLogo;
+                if (match.poster && !match.poster.toLowerCase().includes('default')) {
+                    imgSrc = `https://streamed.pk${match.poster}.webp`;
+                }
+
+                card.innerHTML = `
+                    ${badge}
+                    <img src="${imgSrc}" onerror="this.src='${myWebsiteLogo}'" alt="Poster">
+                    <p class="match-time-txt">${timeStr}</p>
+                    <p class="match-countdown" data-start="${startTs}">Loading timer...</p>
+                    <p class="match-title-txt">${match.title}</p>
+                `;
+                container.appendChild(card);
+            });
+            attachDragToScroll();
+        }
+
+        // Run Timers
         fetchFirebaseData(); 
-        setInterval(fetchFirebaseData, 180000); // Reload data every 3 mins
+        setInterval(fetchFirebaseData, 180000); 
+        setInterval(fetchActiveApiMatches, 60000); 
 
         // UI & Player Variables
         const video = document.getElementById('video-player'); const videoContainer = document.getElementById('videoContainer');
@@ -586,7 +688,7 @@
 
         let isControlsVisible = false; let controlTimeout;
         const hideControls = () => { playerControls.classList.remove('active'); isControlsVisible = false; clearTimeout(controlTimeout); };
-        const showControls = () => { if(!loadingOverlay.classList.contains('hidden') && document.getElementById('match-countdown-container').style.display !== 'flex') return; playerControls.classList.add('active'); isControlsVisible = true; resetControlTimer(); };
+        const showControls = () => { if(!loadingOverlay.classList.contains('hidden')) return; playerControls.classList.add('active'); isControlsVisible = true; resetControlTimer(); };
         const resetControlTimer = () => { clearTimeout(controlTimeout); controlTimeout = setTimeout(hideControls, 3000); };
 
         adShield.addEventListener('click', function(e) {
@@ -608,7 +710,7 @@
 
         btnPlayPause.addEventListener('click', (e) => {
             e.stopPropagation();
-            if(currentStreamType === 'embed') { showToast("Use the embed player's internal controls"); return; }
+            if(currentStreamType === 'embed' || currentStreamType === 'streamed-embed') { showToast("Use the embed player's internal controls"); return; }
             if (currentStreamType === 'youtube' && ytPlayer) {
                 let state = ytPlayer.getPlayerState();
                 if (state === YT.PlayerState.PLAYING) { ytPlayer.pauseVideo(); iconPlay.innerHTML = '<path d="M8 5v14l11-7z"/>'; showControls(); } 
@@ -627,17 +729,15 @@
         document.getElementById('btn-aspect').addEventListener('click', (e) => {
             e.stopPropagation(); aspectIndex = (aspectIndex + 1) % aspectModes.length;
             video.style.objectFit = aspectModes[aspectIndex]; 
-            
             let ytIframe = document.querySelector('#youtube-container iframe');
             if (ytIframe) ytIframe.style.transform = ytScaleModes[aspectIndex];
-            
             document.getElementById('icon-aspect').innerHTML = aspectIconsList[aspectIndex];
             showToast("ASPECT CHANGED: " + aspectModes[aspectIndex].toUpperCase()); resetControlTimer();
         });
 
         document.getElementById('btn-pip').addEventListener('click', async (e) => {
             e.stopPropagation();
-            if (currentStreamType === 'youtube' || currentStreamType === 'embed') {
+            if (currentStreamType === 'youtube' || currentStreamType === 'embed' || currentStreamType === 'streamed-embed') {
                 showToast("⚠️ PiP Support is Browser-Restricted for YouTube & Embeds.");
             } else {
                 try { if (video !== document.pictureInPictureElement) await video.requestPictureInPicture(); else await document.exitPictureInPicture(); } catch(err) {}
@@ -688,6 +788,7 @@
             resetControlTimer();
         });
 
+        // Touch Swipe Logic
         let startY = 0, startX = 0, startVol = 1, startBright = 0, isSwipingDrag = false;
         videoContainer.addEventListener('touchstart', (e) => { 
             if(!isLocked){ 
@@ -720,42 +821,151 @@
         }, {passive: false});
         videoContainer.addEventListener('touchend', () => { setTimeout(() => { document.getElementById('swipe-indicator').classList.remove('show'); isSwipingDrag = false; }, 300); });
 
-        let currentPlayingId = null; let matchCountdownInterval = null; const tickAudio = document.getElementById('tick-sound');
-        function stopAllTimers() { clearInterval(matchCountdownInterval); tickAudio.pause(); tickAudio.currentTime = 0; document.getElementById('match-countdown-container').style.display = 'none'; }
+        let currentPlayingId = null; 
 
+        // Fix: Explicitly remove sandbox attribute to allow scripts inside iframes
         function prepareEmbedCode(html) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const iframes = doc.querySelectorAll('iframe');
-            iframes.forEach(ifr => {
-                ifr.setAttribute('allowfullscreen', 'true');
-                ifr.setAttribute('webkitallowfullscreen', 'true');
-                ifr.setAttribute('mozallowfullscreen', 'true');
-                ifr.style.width = '100%';
-                ifr.style.height = '100%';
-                ifr.style.border = 'none';
+            const parser = new DOMParser(); const doc = parser.parseFromString(html, 'text/html'); const iframes = doc.querySelectorAll('iframe');
+            iframes.forEach(ifr => { 
+                ifr.setAttribute('allowfullscreen', 'true'); 
+                ifr.setAttribute('webkitallowfullscreen', 'true'); 
+                ifr.setAttribute('mozallowfullscreen', 'true'); 
+                ifr.style.width = '100%'; 
+                ifr.style.height = '100%'; 
+                ifr.style.border = 'none'; 
+                ifr.removeAttribute('sandbox'); 
             });
             return doc.body.innerHTML;
         }
 
-        // Live Events Render
-        function renderEvents() {
-            const wrapper = document.getElementById('live-events-wrapper'); const container = document.getElementById('user-events-list');
-            if(allEvents.length === 0) { wrapper.style.display = 'none'; return; }
-            wrapper.style.display = 'block'; container.innerHTML = ''; const now = new Date().getTime();
-            allEvents.forEach(match => {
-                const startTs = new Date(match.startTime).getTime(); const endTs = new Date(match.endTime).getTime();
-                let badge = now < startTs ? `<span class="event-badge" style="background:#f39c12; color:#000;">UPCOMING</span>` : (now >= startTs && now <= endTs) ? `<span class="event-badge">LIVE NOW</span>` : `<span class="event-badge" style="background:#2c3e50; animation:none;">END MATCH</span>`;
-                const card = document.createElement('div'); card.className = 'event-card tv-focusable'; card.tabIndex = 0; card.dataset.id = match.id;
-                if(match.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { if(isMouseDragging) return; playMatch(match.id); };
-                card.innerHTML = `${badge}<img src="${match.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=MATCH'"><p>${match.matchName}</p>`;
+        // Popup Modal Logics
+        function closeStreamPopup() {
+            document.getElementById('stream-popup-overlay').style.display = 'none';
+        }
+
+        async function showStreamPopup(match) {
+            const overlay = document.getElementById('stream-popup-overlay');
+            const list = document.getElementById('popup-streams-list');
+            
+            document.getElementById('popup-match-title').innerText = match.title;
+            list.innerHTML = '<p style="color:#00d2ff; padding:20px; font-weight:bold;">Searching for live links...</p>';
+            overlay.style.display = 'flex';
+
+            let allStreams = [];
+            if(match.sources && match.sources.length > 0) {
+                const promises = match.sources.map(s =>
+                    fetch(`https://streamed.pk/api/stream/${s.source}/${s.id}`).then(res => res.json()).catch(() => [])
+                );
+                const results = await Promise.all(promises);
+                results.forEach(res => { if(Array.isArray(res)) allStreams = allStreams.concat(res); });
+            }
+
+            list.innerHTML = '';
+            if(allStreams.length === 0) {
+                list.innerHTML = '<p style="color:#e74c3c; padding:20px; font-weight:bold;">Links are not available right now. Please check back when the match starts.</p>';
+                return;
+            }
+
+            allStreams.forEach((st, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'popup-server-btn tv-focusable';
+                btn.innerHTML = `<span>📺 Server ${idx + 1} - ${st.language} ${st.hd ? '<span style="color:#00d2ff;">[HD]</span>' : '[SD]'}</span> <span style="color:#ff0055;">▶ Play</span>`;
+                
+                btn.onclick = () => {
+                    closeStreamPopup();
+                    playVideo(st.embedUrl, match.id, 'streamed-embed'); 
+                };
+                list.appendChild(btn);
+            });
+        }
+
+        function extractYouTubeID(url) { let match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/); return (match && match[7].length == 11) ? match[7] : url; }
+
+        // Play Video function (Handles all Custom, M3U, and Embed streams)
+        function playVideo(url, id, type) {
+            currentPlayingId = id; hideControls(); loadingOverlay.classList.remove('hidden'); hideWatermark(); currentStreamType = type || 'm3u8';
+            document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
+            let activeCard = document.querySelector(`.channel-card[data-id="${id}"], .event-card[data-id="${id}"]`);
+            if(activeCard) activeCard.classList.add('active');
+
+            if (type === 'youtube') {
+                adShield.style.display = 'none';
+                if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') { setTimeout(() => playVideo(url, id, type), 500); return; }
+                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; ytOverlayClick.style.display = 'block';
+                let ytId = extractYouTubeID(url);
+                if (!ytPlayer) {
+                    youtubeContainer.innerHTML = '<div id="yt-player-iframe"></div>';
+                    ytPlayer = new YT.Player('yt-player-iframe', {
+                        videoId: ytId, playerVars: { 'autoplay': 1, 'controls': 0, 'disablekb': 1, 'fs': 0, 'modestbranding': 1, 'rel': 0, 'playsinline': 1 },
+                        events: {
+                            'onReady': (e) => { e.target.playVideo(); loadingOverlay.classList.add('hidden'); showWatermark(); },
+                            'onStateChange': (e) => {
+                                if (e.data === YT.PlayerState.PLAYING) { loadingOverlay.classList.add('hidden'); showWatermark(); iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; } 
+                                else if (e.data === YT.PlayerState.PAUSED) { hideWatermark(); iconPlay.innerHTML = '<path d="M8 5v14l11-7z"/>'; } 
+                                else if (e.data === YT.PlayerState.BUFFERING) { loadingOverlay.classList.remove('hidden'); hideWatermark(); }
+                            }
+                        }
+                    });
+                } else { ytPlayer.loadVideoById(ytId); }
+            } else if (type === 'embed') {
+                // Original Raw HTML Embed
+                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; 
+                ytOverlayClick.style.display = 'none'; 
+                youtubeContainer.innerHTML = prepareEmbedCode(url); 
+                adShield.style.display = 'block'; 
+                setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
+            } else if (type === 'streamed-embed') {
+                // Direct iframe embed from API
+                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; 
+                ytOverlayClick.style.display = 'none'; 
+                youtubeContainer.innerHTML = `<iframe src="${url}" width="100%" height="100%" frameborder="0" allowfullscreen allow="encrypted-media" style="border:none;"></iframe>`;
+                adShield.style.display = 'block'; 
+                setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
+            } else {
+                // Original HLS/M3U8 Playback
+                adShield.style.display = 'none';
+                youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none'; video.style.display = 'block'; ytOverlayClick.style.display = 'none';
+                if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+                if (Hls.isSupported()) { 
+                    if (window.hls) window.hls.destroy(); 
+                    window.hls = new Hls({ lowLatencyMode: true, backBufferLength: 90 }); window.hls.loadSource(url); window.hls.attachMedia(video); 
+                    window.hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(e=>console.log(e)); iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; }); 
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) { 
+                    video.src = url; video.addEventListener('loadedmetadata', () => video.play().catch(e=>console.log(e))); 
+                }
+            } 
+        }
+
+        // Back button action
+        document.getElementById('btn-back').addEventListener('click', (e) => { 
+            e.stopPropagation(); 
+            if(document.fullscreenElement || document.webkitFullscreenElement) {
+                try{ document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen(); }catch(e){}
+            }
+            if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none';
+            youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none';
+            document.querySelectorAll('.event-card, .channel-card').forEach(c => c.classList.remove('active'));
+            currentPlayingId = null; hideWatermark();
+            loadingOverlay.classList.remove('hidden'); setTimeout(()=> loadingOverlay.classList.add('hidden'), 500);
+        });
+
+        // Custom Channels
+        function renderCustomChannels() {
+            const q = document.getElementById('searchInput').value.toLowerCase(); const c = document.getElementById('user-category-filter').value;
+            const container = document.getElementById('user-channel-list'); container.innerHTML = '';
+            let filtered = allCustomChannels.filter(ch => (ch.name.toLowerCase().includes(q)) && (c === 'all' || (ch.category || 'others') === c));
+            if(filtered.length === 0) { container.innerHTML = '<p style="color: #666; width: 100%; text-align: center; padding: 20px;">No custom channels found.</p>'; return; }
+            filtered.forEach(ch => {
+                const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
+                if(ch.id === currentPlayingId) card.classList.add('active');
+                card.onclick = () => { if(isMouseDragging) return; playVideo(ch.url, ch.id, ch.type || 'm3u8'); };
+                card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
                 container.appendChild(card);
             });
             attachDragToScroll();
         }
 
-        // 3. New Fetched M3U Playlist Categories Render (Dynamic Horizontal Scroll)
+        // M3U Playlist Categories
         function renderPlaylistChannels() {
             const wrapper = document.getElementById('playlist-wrapper');
             if(allPlaylistChannels.length === 0) { wrapper.innerHTML = ''; return; }
@@ -788,98 +998,6 @@
                 `;
                 wrapper.innerHTML += catHtml;
             }
-            attachDragToScroll();
-        }
-
-        function playMatch(id) {
-            stopAllTimers(); currentPlayingId = id; hideWatermark(); currentStreamType = 'embed'; ytOverlayClick.style.display = 'none'; 
-            document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
-            document.querySelector(`.event-card[data-id="${id}"]`)?.classList.add('active');
-            if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none';
-            youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none';
-            const match = allEvents.find(e => e.id === id); if(!match) return;
-            document.getElementById('mc-logo').src = match.logo || 'https://via.placeholder.com/150';
-            document.getElementById('mc-title').innerText = match.matchName;
-            loadingOverlay.classList.add('hidden');
-            const startTs = new Date(match.startTime).getTime();
-            function checkStatus() {
-                const now = new Date().getTime();
-                if (now < startTs) {
-                    document.getElementById('match-countdown-container').style.display = 'flex';
-                    let diff = startTs - now;
-                    let h = Math.floor(diff / (1000 * 60 * 60)), m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)), s = Math.floor((diff % (1000 * 60)) / 1000);
-                    document.getElementById('mc-timer').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                    document.getElementById('mc-status').innerHTML = "Match is starting soon..."; document.getElementById('mc-status').style.color = "#f39c12"; tickAudio.play().catch(e => {}); 
-                } else { 
-                    stopAllTimers(); youtubeContainer.style.display = 'block'; loadingOverlay.classList.remove('hidden');
-                    youtubeContainer.innerHTML = prepareEmbedCode(match.embedCode || `<h3 style="color:white; text-align:center; padding:50px;">Stream Link not added yet.</h3>`);
-                    ytOverlayClick.style.display = 'none'; 
-                    adShield.style.display = 'block'; 
-                    setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
-                }
-            }
-            checkStatus(); matchCountdownInterval = setInterval(checkStatus, 1000); setTimeout(() => videoContainer.focus(), 300);
-        }
-
-        function extractYouTubeID(url) { let match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/); return (match && match[7].length == 11) ? match[7] : url; }
-
-        function playVideo(url, id, type) {
-            stopAllTimers(); currentPlayingId = id; hideControls(); loadingOverlay.classList.remove('hidden'); hideWatermark(); currentStreamType = type || 'm3u8';
-            document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
-            let activeCard = document.querySelector(`.channel-card[data-id="${id}"]`);
-            if(activeCard) activeCard.classList.add('active');
-
-            if (type === 'youtube') {
-                adShield.style.display = 'none';
-                if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') { setTimeout(() => playVideo(url, id, type), 500); return; }
-                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; ytOverlayClick.style.display = 'block';
-                let ytId = extractYouTubeID(url);
-                if (!ytPlayer) {
-                    youtubeContainer.innerHTML = '<div id="yt-player-iframe"></div>';
-                    ytPlayer = new YT.Player('yt-player-iframe', {
-                        videoId: ytId, playerVars: { 'autoplay': 1, 'controls': 0, 'disablekb': 1, 'fs': 0, 'modestbranding': 1, 'rel': 0, 'playsinline': 1 },
-                        events: {
-                            'onReady': (e) => { e.target.playVideo(); loadingOverlay.classList.add('hidden'); showWatermark(); },
-                            'onStateChange': (e) => {
-                                if (e.data === YT.PlayerState.PLAYING) { loadingOverlay.classList.add('hidden'); showWatermark(); iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; } 
-                                else if (e.data === YT.PlayerState.PAUSED) { hideWatermark(); iconPlay.innerHTML = '<path d="M8 5v14l11-7z"/>'; } 
-                                else if (e.data === YT.PlayerState.BUFFERING) { loadingOverlay.classList.remove('hidden'); hideWatermark(); }
-                            }
-                        }
-                    });
-                } else { ytPlayer.loadVideoById(ytId); }
-            } else if (type === 'embed') {
-                if (window.hls) window.hls.destroy(); video.pause(); video.style.display = 'none'; youtubeContainer.style.display = 'block'; 
-                ytOverlayClick.style.display = 'none'; 
-                youtubeContainer.innerHTML = prepareEmbedCode(url); 
-                adShield.style.display = 'block'; 
-                setTimeout(() => { loadingOverlay.classList.add('hidden'); showWatermark(); }, 1500);
-            } else {
-                adShield.style.display = 'none';
-                youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none'; video.style.display = 'block'; ytOverlayClick.style.display = 'none';
-                if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
-                if (Hls.isSupported()) { 
-                    if (window.hls) window.hls.destroy(); 
-                    window.hls = new Hls({ lowLatencyMode: true, backBufferLength: 90 }); window.hls.loadSource(url); window.hls.attachMedia(video); 
-                    window.hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play().catch(e=>console.log(e)); iconPlay.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>'; }); 
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) { 
-                    video.src = url; video.addEventListener('loadedmetadata', () => video.play().catch(e=>console.log(e))); 
-                }
-            } setTimeout(() => videoContainer.focus(), 300);
-        }
-
-        function renderCustomChannels() {
-            const q = document.getElementById('searchInput').value.toLowerCase(); const c = document.getElementById('user-category-filter').value;
-            const container = document.getElementById('user-channel-list'); container.innerHTML = '';
-            let filtered = allCustomChannels.filter(ch => (ch.name.toLowerCase().includes(q)) && (c === 'all' || (ch.category || 'others') === c));
-            if(filtered.length === 0) { container.innerHTML = '<p style="color: #666; width: 100%; text-align: center; padding: 20px;">No custom channels found.</p>'; return; }
-            filtered.forEach(ch => {
-                const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
-                if(ch.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { if(isMouseDragging) return; playVideo(ch.url, ch.id, ch.type || 'm3u8'); };
-                card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
-                container.appendChild(card);
-            });
             attachDragToScroll();
         }
     </script>
