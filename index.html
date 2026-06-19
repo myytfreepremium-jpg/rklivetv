@@ -748,7 +748,7 @@
                 let badge = now < startTs ? `<span class="event-badge" style="background:#f39c12; color:#000;">UPCOMING</span>` : (now >= startTs && now <= endTs) ? `<span class="event-badge">LIVE NOW</span>` : `<span class="event-badge" style="background:#2c3e50; animation:none;">END MATCH</span>`;
                 const card = document.createElement('div'); card.className = 'event-card tv-focusable'; card.tabIndex = 0; card.dataset.id = match.id;
                 if(match.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { if(isMouseDragging) return; playMatch(match.id); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                card.onclick = () => { if(isMouseDragging) return; playMatch(match.id); };
                 card.innerHTML = `${badge}<img src="${match.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=MATCH'"><p>${match.matchName}</p>`;
                 container.appendChild(card);
             });
@@ -778,7 +778,7 @@
                         ${grouped[cat].map(ch => {
                             let isActive = ch.id === currentPlayingId ? 'active' : '';
                             return `
-                                <div class="channel-card tv-focusable ${isActive}" tabindex="0" data-id="${ch.id}" onclick="if(isMouseDragging) return; playVideo('${ch.url}', '${ch.id}', 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' });">
+                                <div class="channel-card tv-focusable ${isActive}" tabindex="0" data-id="${ch.id}" onclick="if(isMouseDragging) return; playVideo('${ch.url}', '${ch.id}', 'm3u8');">
                                     <img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'">
                                     <p>${ch.name}</p>
                                 </div>
@@ -876,7 +876,7 @@
             filtered.forEach(ch => {
                 const card = document.createElement('div'); card.className = 'channel-card tv-focusable'; card.tabIndex = 0; card.dataset.id = ch.id;
                 if(ch.id === currentPlayingId) card.classList.add('active');
-                card.onclick = () => { if(isMouseDragging) return; playVideo(ch.url, ch.id, ch.type || 'm3u8'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+                card.onclick = () => { if(isMouseDragging) return; playVideo(ch.url, ch.id, ch.type || 'm3u8'); };
                 card.innerHTML = `<img src="${ch.logo}" onerror="this.src='https://via.placeholder.com/150/ffffff/000000?text=TV'"><p>${ch.name}</p>`;
                 container.appendChild(card);
             });
