@@ -11,19 +11,13 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://rklived.vercel.app/" />
     
-    <!-- Open Graph for Social Media Share (Facebook, WhatsApp, etc) -->
+    <!-- Open Graph for Social Media Share -->
     <meta property="og:title" content="RK LIVE TV - Premium Live Streaming">
     <meta property="og:description" content="Watch premium live sports, live football matches, and custom TV channels for free without buffering.">
     <meta property="og:image" content="https://placehold.co/1200x630/1a1a21/00d2ff/png?text=RK+LIVE+TV">
     <meta property="og:url" content="https://rklived.vercel.app/">
     <meta property="og:site_name" content="RK LIVE TV">
     <meta property="og:type" content="website">
-
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="RK LIVE TV - Premium Live Streaming">
-    <meta name="twitter:description" content="Watch premium live sports, live football matches, and custom TV channels for free.">
-    <meta name="twitter:image" content="https://placehold.co/1200x630/1a1a21/00d2ff/png?text=RK+LIVE+TV">
 
     <!-- Google Site Verification & Security -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -34,22 +28,6 @@
     <link rel="preconnect" href="https://my-digital-store-917ee-default-rtdb.firebaseio.com">
     <link rel="preconnect" href="https://streamed.pk">
     
-    <!-- JSON-LD SEO Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "RK LIVE TV",
-      "url": "https://rklived.vercel.app/",
-      "description": "Watch premium live sports, football matches, custom TV channels, and entertainment for free without buffering.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://rklived.vercel.app/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-
     <!-- HLS & YouTube API -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -61,110 +39,91 @@
         :focus { outline: none !important; box-shadow: none !important; }
 
         /* TV Focus Mode */
-        .tv-mode .tv-focusable:focus { outline: 3px solid #00d2ff !important; box-shadow: 0 0 15px #00d2ff !important; transform: scale(1.05); z-index: 100; border-radius: 8px; transition: all 0.2s ease; }
-        .tv-mode .channel-card:focus, .tv-mode .event-card:focus { border-color: #00d2ff !important; background: #22222a !important; box-shadow: 0 0 20px rgba(0, 210, 255, 0.5) !important; transform: scale(1.08); }
-        .tv-mode .control-btn:focus, .tv-mode .play-pause-btn:focus { outline: 3px solid #ff0055 !important; box-shadow: 0 0 15px #ff0055 !important; background: rgba(255, 0, 85, 0.3) !important; }
+        .tv-focusable:focus { outline: 3px solid #00d2ff !important; box-shadow: 0 0 15px #00d2ff !important; transform: scale(1.05); z-index: 100; border-radius: 8px; transition: all 0.2s ease; }
+        .channel-card:focus, .event-card:focus { border-color: #00d2ff !important; background: #22222a !important; box-shadow: 0 0 20px rgba(0, 210, 255, 0.5) !important; transform: scale(1.08); }
 
         /* ==========================================
-           HEADER DESIGN (NEW ORGANIZED LAYOUT) 
+           HEADER DESIGN (NO OVERLAP & FIXED ALIGNMENT)
            ========================================== */
         .sticky-header-video { position: sticky; top: 0; z-index: 100; width: 100%; background: #0b0b0f; box-shadow: 0 8px 25px rgba(0,0,0,0.8); border-bottom: 1px solid #1f1f25; }
-        .navbar { display: flex; flex-direction: column; width: 100%; background-color: #0f0f13; border-bottom: 1px solid #1f1f25; padding: 12px 15px; gap: 15px; }
+        .navbar { display: flex; flex-direction: column; width: 100%; background-color: #0f0f13; border-bottom: 1px solid #1f1f25; padding: 10px 15px; gap: 12px; }
         
-        .header-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .header-bottom-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; }
+        .header-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; }
+        .header-bottom-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 10px; flex-wrap: wrap; }
 
-        .logo-wrapper { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        .logo-text { font-size: 20px; font-weight: 900; display: flex; align-items: center; gap: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
+        .logo-wrapper { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .logo-text { font-size: 18px; font-weight: 900; display: flex; align-items: center; gap: 4px; letter-spacing: 1.2px; text-transform: uppercase; }
         .logo-text span.live { color: #ff0055; }
-        .logo-text span.tv { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 6px; font-size: 15px; font-weight: bold; }
+        .logo-text span.tv { background-color: #00d2ff; color: #000; padding: 2px 6px; border-radius: 6px; font-size: 13px; font-weight: bold; }
 
-        /* NEW: Fake Live Viewers Button */
-        .live-viewers-btn { background: rgba(255, 0, 85, 0.1); color: #fff; border: 1px solid #ff0055; padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 10px rgba(255,0,85,0.2); min-width: 140px; cursor: default; }
-        .live-viewers-btn .dot { width: 8px; height: 8px; background: #ff0055; border-radius: 50%; box-shadow: 0 0 8px #ff0055; animation: blinkDot 1.5s infinite; }
+        /* Buttons on Top Right */
+        .top-right-btns { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+        
+        /* Fake Live Viewers Button */
+        .live-viewers-btn { background: rgba(255, 0, 85, 0.1); color: #fff; border: 1px solid #ff0055; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 10px rgba(255,0,85,0.2); cursor: default; }
+        .live-viewers-btn .dot { width: 6px; height: 6px; background: #ff0055; border-radius: 50%; box-shadow: 0 0 8px #ff0055; animation: blinkDot 1.5s infinite; }
         @keyframes blinkDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+        /* Site Link Button */
+        .site-link-btn { background: linear-gradient(45deg, #1a1a21, #22222a); color: #00d2ff; text-decoration: none; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; border: 1px solid #00d2ff; white-space: nowrap; transition: 0.3s; box-shadow: 0 0 10px rgba(0,210,255,0.2); }
+        .site-link-btn:hover { background: #00d2ff; color: #000; }
 
         @media (min-width: 768px) {
             .navbar { flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 25px; }
-            .header-top-row { width: auto; justify-content: flex-start; gap: 30px; }
-            .header-bottom-row { width: auto; justify-content: flex-end; gap: 25px; }
-            .search-container { min-width: 280px; }
+            .header-top-row { width: auto; flex-wrap: nowrap; gap: 30px; }
+            .header-bottom-row { width: auto; flex-wrap: nowrap; gap: 20px; justify-content: flex-end; }
+            .search-container { min-width: 250px; }
         }
 
-        /* Animated Header Logo */
-        .loader {
-            --color-one: #ffbf48; --color-two: #be4a1d; --color-three: #ffbf4780; --color-four: #bf4a1d80; --color-five: #ffbf4740;
-            --time-animation: 2s; position: relative; border-radius: 50%; transform: scale(0.35); margin-right: -28px; margin-left: -28px;
-            box-shadow: 0 0 25px 0 var(--color-three), 0 20px 50px 0 var(--color-four);
-            animation: colorize calc(var(--time-animation) * 3) ease-in-out infinite;
-        }
-        .loader::before { content: ""; position: absolute; top: 0; left: 0; width: 100px; height: 100px; border-radius: 50%; border-top: solid 1px var(--color-one); border-bottom: solid 1px var(--color-two); background: linear-gradient(180deg, var(--color-five), var(--color-four)); }
-        .loader .box { width: 100px; height: 100px; background: linear-gradient(180deg, var(--color-one) 30%, var(--color-two) 70%); }
-        .loader svg { position: absolute; top:0; left:0;}
-        .loader svg mask { filter: contrast(15); animation: roundness calc(var(--time-animation) / 2) linear infinite; }
-        .loader svg mask polygon { filter: blur(7px); }
-        .loader svg mask polygon:nth-child(1) { transform-origin: 75% 25%; transform: rotate(90deg); }
-        .loader svg mask polygon:nth-child(2) { transform-origin: 50% 50%; animation: rotation var(--time-animation) linear infinite reverse; }
-        .loader svg mask polygon:nth-child(3) { transform-origin: 50% 60%; animation: rotation var(--time-animation) linear infinite; }
-        .loader svg mask polygon:nth-child(4) { transform-origin: 40% 40%; animation: rotation var(--time-animation) linear infinite reverse; }
-        .loader svg mask polygon:nth-child(6) { transform-origin: 60% 40%; animation: rotation var(--time-animation) linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes roundness { 0%, 100% { filter: contrast(15); } 20%, 40% { filter: contrast(3); } 60% { filter: contrast(15); } }
-        @keyframes colorize { 0%, 100% { filter: hue-rotate(0deg); } 20% { filter: hue-rotate(-30deg); } 40% { filter: hue-rotate(-60deg); } 60% { filter: hue-rotate(-90deg); } 80% { filter: hue-rotate(-45deg); } }
-
-        /* FIXED Flip Clock (No Shaking/Jitter) */
-        .clock-wrapper { display: flex; flex-direction: row; align-items: center; gap: 8px; min-width: 230px; }
+        /* Fixed Clock Design (No shaking) */
+        .clock-wrapper { display: flex; flex-direction: row; align-items: center; gap: 8px; flex-shrink: 0; }
         .date-display { font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; background: #1a1a21; padding: 4px 8px; border-radius: 12px; border: 1px solid #333; white-space: nowrap; }
         .date-display .day { color: #00d2ff; margin-right: 2px; }
         .date-display .date { color: #ffffff; }
 
-        .flip-clock { display: flex; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-variant-numeric: tabular-nums; }
-        .flip-clock .colon { width: 10px; text-align: center; font-size: 16px; font-weight: 900; }
-        .flip-unit { position: relative; width: 28px; height: 32px; background: #16161a; border-radius: 4px; font-size: 16px; color: #00d2ff; border: 1px solid #333; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .flip-top, .flip-bottom, .flip-flap-top, .flip-flap-bottom { position: absolute; left: 0; width: 100%; height: 16px; background: #22222a; overflow: hidden; backface-visibility: hidden; }
+        .flip-clock { display: flex; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-variant-numeric: tabular-nums; gap: 2px; }
+        .flip-clock span.colon { font-size: 14px; font-weight: bold; padding: 0 1px; }
+        .flip-unit { position: relative; width: 22px; height: 30px; background: #16161a; border-radius: 4px; font-size: 15px; color: #00d2ff; border: 1px solid #333; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .flip-top, .flip-bottom, .flip-flap-top, .flip-flap-bottom { position: absolute; left: 0; width: 100%; height: 15px; background: #22222a; overflow: hidden; backface-visibility: hidden; }
         .flip-top { top: 0; border-radius: 4px 4px 0 0; }
         .flip-bottom { bottom: 0; border-radius: 0 0 4px 4px; }
         .flip-flap-top { top: 0; transform-origin: bottom; animation: flipTop 0.15s ease-in forwards; z-index: 2; }
         .flip-flap-bottom { bottom: 0; transform-origin: top; transform: rotateX(90deg); animation: flipBottom 0.15s ease-out 0.15s forwards; z-index: 2; }
-        .flip-unit span { position: absolute; left: 0; width: 100%; height: 32px; line-height: 32px; text-align: center; display: block; letter-spacing: 1px;}
+        .flip-unit span { position: absolute; left: 0; width: 100%; height: 30px; line-height: 30px; text-align: center; display: block; letter-spacing: 0.5px;}
         .flip-top span, .flip-flap-top span { top: 0; }
-        .flip-bottom span, .flip-flap-bottom span { top: -16px; }
-        .flip-unit::after { content: ''; position: absolute; left: 0; top: 16px; width: 100%; height: 1px; background: rgba(0, 0, 0, 0.9); z-index: 5; box-shadow: 0 1px 0 rgba(255,255,255,0.05);}
-        .flip-ampm { font-size: 13px; color: #ff0055; margin-left: 5px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; width: 22px; }
+        .flip-bottom span, .flip-flap-bottom span { top: -15px; }
+        .flip-unit::after { content: ''; position: absolute; left: 0; top: 15px; width: 100%; height: 1px; background: rgba(0, 0, 0, 0.9); z-index: 5; }
+        .flip-ampm { font-size: 11px; color: #ff0055; margin-left: 3px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; }
 
         @keyframes flipTop { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(-90deg); } }
         @keyframes flipBottom { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0deg); } }
 
         /* Search Bar */
-        .search-container { position: relative; flex-grow: 1; width: 100%; max-width: 100%; }
+        .search-container { position: relative; flex-grow: 1; min-width: 150px; }
         .search-box { background: #16161a; border: 1px solid #2c2c35; color: white; padding: 10px 15px 10px 35px; border-radius: 20px; outline: none; width: 100%; font-size: 13px; transition: 0.3s; }
         .search-box:focus { border-color: #00d2ff !important; box-shadow: 0 0 10px rgba(0,210,255,0.2); }
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.6; pointer-events: none; }
 
         /* ==========================================
-           VIDEO PLAYER (Optimized Size for TV & PC)
+           VIDEO PLAYER (Optimized Smaller Size)
            ========================================== */
-        .video-wrapper { position: relative; width: 100%; max-width: 800px; margin: 0 auto; aspect-ratio: 16/9; max-height: 40vh; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .video-wrapper { position: relative; width: 100%; max-width: 700px; margin: 0 auto; aspect-ratio: 16/9; max-height: 35vh; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; }
         
-        /* Desktop & TV Player Size Constraints */
         @media (min-width: 768px) {
-            .video-wrapper { max-height: 48vh; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        }
-        @media (max-width: 600px) {
-            .video-wrapper { max-width: 100%; max-height: 35vh; border-radius: 0; }
+            .video-wrapper { max-height: 48vh; max-width: 850px; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         }
 
         video { width: 100%; height: 100%; outline: none; display: block; transition: object-fit 0.3s ease; }
         
         #youtube-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 40; display: none; background: #000; overflow: hidden; }
-        #youtube-container iframe { width: 100%; height: 100%; border: none; transition: transform 0.3s ease; transform-origin: center; pointer-events: auto; }
+        #youtube-container iframe { width: 100%; height: 100%; border: none; pointer-events: auto; }
         
         #yt-overlay-click { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 45; display: none; cursor: pointer; }
         #ad-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 48; display: none; background: transparent; cursor: pointer; }
 
-        #video-watermark { position: absolute; top: 15px; right: 15px; z-index: 55; display: none; align-items: center; gap: 5px; font-size: 16px; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); pointer-events: none; text-shadow: 0px 1px 3px rgba(0,0,0,0.8); }
+        #video-watermark { position: absolute; top: 15px; right: 15px; z-index: 55; display: none; align-items: center; gap: 5px; font-size: 14px; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); pointer-events: none; }
         #video-watermark span.live { color: rgba(255, 0, 85, 0.6); }
-        #video-watermark span.tv { background-color: rgba(0, 210, 255, 0.4); color: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        #video-watermark span.tv { background-color: rgba(0, 210, 255, 0.4); color: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
         .toast { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #00d2ff; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 100; pointer-events: none; border: 1px solid #00d2ff; }
         .toast.show { opacity: 1; }
@@ -179,13 +138,12 @@
 
         #loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0b0b0f; z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; }
         #loading-overlay.hidden { opacity: 0; pointer-events: none; }
-        .player-logo-anim { display: flex; align-items: center; gap: 8px; font-size: 30px; font-weight: 900; letter-spacing: 2px; animation: pulseLogo 1s infinite alternate; }
+        .player-logo-anim { display: flex; align-items: center; gap: 8px; font-size: 25px; font-weight: 900; letter-spacing: 2px; }
         .player-logo-anim .rk-text { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
         .player-logo-anim .live-text { color: #ff0055; text-shadow: 0 0 15px rgba(255,0,85,0.8); }
-        .player-logo-anim .tv-text { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 8px; font-size: 22px; box-shadow: 0 0 15px rgba(0,210,255,0.8); }
-        .loading-text { margin-top: 15px; color: #00d2ff; font-size: 12px; letter-spacing: 3px; font-weight: bold; animation: blink 1s infinite; }
+        .player-logo-anim .tv-text { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 8px; font-size: 18px; box-shadow: 0 0 15px rgba(0,210,255,0.8); }
+        .loading-text { margin-top: 15px; color: #00d2ff; font-size: 11px; letter-spacing: 3px; font-weight: bold; animation: blink 1s infinite; }
 
-        @keyframes pulseLogo { 0% { transform: scale(0.95); } 100% { transform: scale(1.05); } }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* Controls UI */
@@ -195,19 +153,19 @@
         .controls-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .controls-top .left, .controls-top .right { display: flex; gap: 10px; align-items: center; }
         .control-btn { background: none; border: none; color: white; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; border-radius: 50%; outline: none; }
-        .control-btn svg { width: 28px; height: 28px; fill: white; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8)); transition: 0.2s; }
+        .control-btn svg { width: 26px; height: 26px; fill: white; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8)); transition: 0.2s; }
         .control-btn:hover svg { fill: #00d2ff; }
 
-        .controls-bottom { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .controls-bottom { width: 100%; display: flex; flex-direction: column; gap: 8px; }
         .buttons-bottom { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 5px; }
         .bottom-left-btns { display: flex; gap: 10px; align-items: center; }
         
         .center-controls { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 30px; align-items: center; }
-        .play-pause-btn { width: 60px; height: 60px; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.7); transition: transform 0.2s; outline: none;}
-        .play-pause-btn svg { width: 30px; height: 30px; fill: white; margin-left: 4px; }
+        .play-pause-btn { width: 55px; height: 55px; background: rgba(0,0,0,0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 2px solid rgba(255,255,255,0.7); transition: transform 0.2s; outline: none;}
+        .play-pause-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
         .play-pause-btn:active { transform: scale(0.9); }
 
-        .progress-container { display: flex; align-items: center; gap: 10px; width: 100%; font-size: 13px; font-weight: bold; text-shadow: 1px 1px 3px black; }
+        .progress-container { display: flex; align-items: center; gap: 10px; width: 100%; font-size: 12px; font-weight: bold; text-shadow: 1px 1px 3px black; }
         .progress-bar { flex-grow: 1; -webkit-appearance: none; appearance: none; height: 4px; background: rgba(255, 255, 255, 0.3); border-radius: 5px; outline: none; cursor: pointer; pointer-events: none;}
         .progress-bar::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #00d2ff; cursor: pointer; box-shadow: 0 0 5px rgba(0,210,255,0.8); }
 
@@ -222,25 +180,25 @@
         .notice-badge { background: linear-gradient(90deg, #ff0055, #ff0000); color: white; padding: 6px 15px; font-size: 13px; font-weight: bold; border-radius: 20px; margin: 5px 10px; white-space: nowrap; z-index: 2; box-shadow: 0 0 10px rgba(255,0,0,0.4); }
         .notice-marquee { color: #00d2ff; font-size: 14px; padding-right: 10px; }
 
-        .filter-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 12px 15px; background-color: #0b0b0f; border-bottom: 1px solid #1a1a21; gap: 10px; }
-        .filter-container h3 { font-size: 15px; color: #fff; font-weight: bold; margin: 0; text-transform: uppercase;}
-        .category-select { background: #16161a; color: #00d2ff; border: 1px solid #2c2c35; padding: 8px 15px; border-radius: 20px; outline: none; font-size: 13px; font-weight: bold; cursor: pointer; }
+        .filter-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 12px 15px; background-color: #0b0b0f; border-bottom: 1px solid #1a1a21; gap: 10px; margin-top: 5px;}
+        .filter-container h3 { font-size: 14px; color: #fff; font-weight: bold; margin: 0; text-transform: uppercase;}
+        .category-select { background: #16161a; color: #00d2ff; border: 1px solid #2c2c35; padding: 6px 12px; border-radius: 20px; outline: none; font-size: 12px; font-weight: bold; cursor: pointer; }
 
-        .channel-scroll-container { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 20px 15px; gap: 15px; background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; }
+        .channel-scroll-container { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 15px; gap: 12px; background: #0b0b0f; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; }
         .channel-scroll-container:active { cursor: grabbing; } 
         .channel-scroll-container::-webkit-scrollbar { display: none; } 
         
-        .channel-card, .event-card { flex: 0 0 auto; width: 130px; background: #1a1a21; border-radius: 12px; padding: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; outline: none; position: relative;}
+        .channel-card, .event-card { flex: 0 0 auto; width: 120px; background: #1a1a21; border-radius: 12px; padding: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; outline: none; position: relative;}
         .channel-card.active, .event-card.active { border-color: #00d2ff; background: #22222a; box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
-        .channel-card img, .event-card img { width: 100%; height: 70px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px; pointer-events: none; }
-        .channel-card p { font-size: 13px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; pointer-events: none;}
+        .channel-card img, .event-card img { width: 100%; height: 60px; object-fit: contain; background: #ffffff; border-radius: 8px; margin-bottom: 10px; padding: 4px; pointer-events: none; }
+        .channel-card p { font-size: 12px; text-align: center; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; font-weight: bold; pointer-events: none;}
         .event-badge { position: absolute; top: 0; right: 0; color: white; font-size: 9px; font-weight: bold; padding: 3px 6px; border-radius: 0 10px 0 10px; z-index: 2;}
 
-        .event-card { width: 155px; }
-        .event-card img { height: 85px; object-fit: cover; }
+        .event-card { width: 145px; }
+        .event-card img { height: 75px; object-fit: cover; }
         .match-time-txt { font-size: 11px !important; color: #00d2ff !important; margin-bottom: 2px !important; text-align: center !important; font-weight: bold; }
-        .match-countdown { font-family: 'Courier New', Courier, monospace; font-size: 11px !important; font-weight: bold; margin-bottom: 4px !important; text-align: center !important; }
-        .match-title-txt { font-size: 12px !important; text-align: center !important; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: bold; line-height: 1.2; width: 100%; color: #fff;}
+        .match-countdown { font-family: 'Courier New', Courier, monospace; font-size: 10px !important; font-weight: bold; margin-bottom: 4px !important; text-align: center !important; }
+        .match-title-txt { font-size: 11px !important; text-align: center !important; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: bold; line-height: 1.2; width: 100%; color: #fff;}
 
         .playstore-btn { display: none; background: #000; color: white; margin: 20px auto; max-width: 300px; text-decoration: none; border-radius: 10px; border: 1px solid #444; padding: 10px 20px; align-items: center; gap: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); outline: none; justify-content: center; }
         .playstore-btn:hover, .playstore-btn:focus { background: #111; border-color: #00d2ff; }
@@ -251,9 +209,6 @@
 
         .ad-container { width: 100%; display: none; justify-content: center; align-items: center; margin: 10px 0; min-height: 60px; overflow: hidden; background: #0f0f13; }
         
-        .cat-title-wrap { background: #111a22; padding: 8px 15px; border-left: 4px solid #00d2ff; margin-top: 15px; }
-        .cat-title-wrap h4 { margin: 0; font-size: 15px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
-
         /* Popup Modals */
         #stream-popup-overlay, #about-popup-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -283,36 +238,30 @@
             box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4); display: inline-flex; align-items: center; gap: 10px; 
         }
         .about-btn:hover, .about-btn:focus { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0, 210, 255, 0.7); color: #fff;}
-
-        /* Responsive UI */
-        @media (max-width: 600px) {
-            .channel-card { width: 110px; } .channel-card img { height: 60px; }
-            .event-card { width: 140px; }
-            #video-watermark { top: 10px; right: 10px; font-size: 12px; }
-        }
     </style>
 </head>
 <body>
 
     <div class="sticky-header-video">
         <header class="navbar">
-            <!-- Row 1: Logo & Fake Live Viewers Button -->
+            <!-- Row 1: Logo, Viewers & 1st Website Button -->
             <div class="header-top-row">
                 <div class="logo-wrapper tv-focusable" tabindex="0" onclick="window.location.href='/'">
-                    <div class="loader loader-header">
-                        <svg width="100" height="100" viewBox="0 0 100 100"><defs><mask id="clip-header"><polygon points="0,0 100,0 100,100 0,100" fill="black"></polygon><polygon points="25,25 75,25 50,75" fill="white"></polygon><polygon points="50,25 75,75 25,75" fill="white"></polygon><polygon points="35,35 65,35 50,65" fill="white"></polygon><polygon points="35,35 65,35 50,65" fill="white"></polygon><polygon points="35,35 65,35 50,65" fill="white"></polygon><polygon points="35,35 65,35 50,65" fill="white"></polygon></mask></defs></svg>
-                        <div class="box" style="mask: url(#clip-header); -webkit-mask: url(#clip-header);"></div>
-                    </div>
                     <div class="logo-text">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
                 </div>
-                <!-- FIXED: Original Live Viewers Counter (Fake) -->
-                <div class="live-viewers-btn tv-focusable" tabindex="0">
-                    <span class="dot"></span>
-                    <span id="fake-viewer-count">1,245</span> Watching
+                
+                <div class="top-right-btns">
+                    <!-- FAKE LIVE VIEWERS (Updates every 30s) -->
+                    <div class="live-viewers-btn tv-focusable" tabindex="0">
+                        <span class="dot"></span>
+                        <span id="fake-viewer-count">1,245</span>
+                    </div>
+                    <!-- 1ST WEBSITE BUTTON -->
+                    <a href="https://rklived.vercel.app/" target="_blank" class="site-link-btn tv-focusable" tabindex="0">১ম ওয়েবসাইট</a>
                 </div>
             </div>
 
-            <!-- Row 2: FIXED Clock & Search Box -->
+            <!-- Row 2: Fixed Clock & Search Box -->
             <div class="header-bottom-row">
                 <div class="clock-wrapper">
                     <div class="date-display" id="date-display">
@@ -341,7 +290,7 @@
             </div>
         </header>
 
-        <!-- VIDEO PLAYER (Size optimized to show channels) -->
+        <!-- VIDEO PLAYER (Size Fixed for PC & TV) -->
         <div class="video-wrapper tv-focusable" id="videoContainer" tabindex="0">
             <div id="video-watermark">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
             <div id="toast-msg" class="toast">Action</div>
@@ -413,7 +362,7 @@
         </div>
     </div>
 
-    <!-- About Us & Disclaimer Popup Modal (Updated DMCA Notice) -->
+    <!-- About Us & Disclaimer Popup Modal -->
     <div id="about-popup-overlay">
         <div id="about-popup">
             <h2 style="color:#00d2ff; border-bottom:1px solid #222; padding-bottom:10px; margin-bottom:15px;">📄 About RK LIVE TV</h2>
@@ -437,7 +386,7 @@
 
     <!-- 1. LIVE SPORTS API Categorized Section (DROPDOWN) -->
     <div class="filter-container" id="api-filter-container" style="display:none;">
-        <h3>🏆 Live Sports</h3>
+        <h3>🏆 Live Sports API</h3>
         <select id="api-sport-filter" class="category-select tv-focusable" onchange="renderSelectedApiSport()" tabindex="0">
             <!-- Options will load dynamically -->
         </select>
@@ -508,20 +457,19 @@
         };
 
         // ==========================================
-        // FAKE LIVE VIEWERS SCRIPT
+        // FAKE LIVE VIEWERS COUNTER (UPDATES EVERY 30s)
         // ==========================================
-        let baseViewers = 1200 + Math.floor(Math.random() * 500); // Start between 1200 - 1700
+        let baseViewers = 1200 + Math.floor(Math.random() * 500); 
         function updateFakeViewers() {
             const viewerEl = document.getElementById('fake-viewer-count');
             if(!viewerEl) return;
-            // Add/Subtract random users (-40 to +60)
-            let fluctuation = Math.floor(Math.random() * 100) - 40;
+            let fluctuation = Math.floor(Math.random() * 100) - 40; // Random change -40 to +60
             baseViewers += fluctuation;
-            if(baseViewers < 500) baseViewers = 500; // Minimum limit
+            if(baseViewers < 500) baseViewers = 500; 
             viewerEl.innerText = baseViewers.toLocaleString();
         }
         updateFakeViewers();
-        setInterval(updateFakeViewers, 30000); // Change roughly every 30 seconds
+        setInterval(updateFakeViewers, 30000); 
 
         // ==========================================
         // FIREBASE REST API CONFIGURATION 
@@ -574,7 +522,7 @@
             });
         }
 
-        // Clock Logic
+        // Clock Logic (Fixed Shaking)
         function updateFlip(id, val) {
             const el = document.getElementById(id); const current = el.getAttribute('data-value');
             if (current === val) return; el.setAttribute('data-value', val);
@@ -700,13 +648,19 @@
             } catch (error) {}
         }
         
-        // Fetch Active API Matches into Dropdown Menu
+        // Fetch Active API Matches & Create Dropdown Options
         async function fetchActiveApiMatches() {
             try {
                 const sportsRes = await fetch('https://streamed.pk/api/sports');
                 const sportsList = await sportsRes.json();
                 
-                const activeSports = sportsList.filter(sport => apiToggles[sport.id] === true);
+                // Get sports toggled ON from firebase
+                let activeSports = sportsList.filter(sport => apiToggles[sport.id] === true);
+                
+                // Fallback: If apiToggles isn't set up yet, show everything
+                if(Object.keys(apiToggles).length === 0) {
+                    activeSports = sportsList;
+                }
                 
                 const filterContainer = document.getElementById('api-filter-container');
                 const selectMenu = document.getElementById('api-sport-filter');
@@ -740,8 +694,11 @@
                 if (hasMatches) {
                     filterContainer.style.display = 'flex';
                     matchesList.style.display = 'flex';
+                    
                     if (currentSelection && apiMatchesData[currentSelection]) {
                         selectMenu.value = currentSelection;
+                    } else {
+                        selectMenu.value = selectMenu.options[0].value;
                     }
                     renderSelectedApiSport();
                 } else {
@@ -751,6 +708,7 @@
             } catch (err) { }
         }
 
+        // Render selected API Sport from Dropdown
         function renderSelectedApiSport() {
             const selectedSportId = document.getElementById('api-sport-filter').value;
             const container = document.getElementById('api-matches-list');
