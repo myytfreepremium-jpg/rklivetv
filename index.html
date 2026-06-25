@@ -4,7 +4,7 @@
     <!-- Advanced SEO & Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-    <title>RK LIVE TV</title>
+    <title>RK LIVE TV - Free Live Sports & TV Channels</title>
     <meta name="description" content="Watch premium live sports, football matches, cricket, custom TV channels, and entertainment for free without buffering on RK LIVE TV.">
     <meta name="keywords" content="RK LIVE TV, live sports, football matches streaming, live tv channels, m3u8 player, hls, no buffering tv, watch live football, sports api streaming">
     <meta name="author" content="RK TV">
@@ -79,9 +79,10 @@
         .logo-text span.live { color: #ff0055; }
         .logo-text span.tv { background-color: #00d2ff; color: #000; padding: 2px 8px; border-radius: 6px; font-size: 15px; font-weight: bold; }
 
-        /* Site Link Button */
-        .site-link-btn { background: linear-gradient(45deg, #1a1a21, #22222a); color: #00d2ff; text-decoration: none; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid #00d2ff; white-space: nowrap; transition: 0.3s; box-shadow: 0 0 10px rgba(0,210,255,0.2); }
-        .site-link-btn:hover { background: #00d2ff; color: #000; box-shadow: 0 0 15px rgba(0,210,255,0.6); transform: scale(1.05); }
+        /* NEW: Fake Live Viewers Button */
+        .live-viewers-btn { background: rgba(255, 0, 85, 0.1); color: #fff; border: 1px solid #ff0055; padding: 6px 15px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 10px rgba(255,0,85,0.2); min-width: 140px; cursor: default; }
+        .live-viewers-btn .dot { width: 8px; height: 8px; background: #ff0055; border-radius: 50%; box-shadow: 0 0 8px #ff0055; animation: blinkDot 1.5s infinite; }
+        @keyframes blinkDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
         @media (min-width: 768px) {
             .navbar { flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 25px; }
@@ -111,14 +112,15 @@
         @keyframes roundness { 0%, 100% { filter: contrast(15); } 20%, 40% { filter: contrast(3); } 60% { filter: contrast(15); } }
         @keyframes colorize { 0%, 100% { filter: hue-rotate(0deg); } 20% { filter: hue-rotate(-30deg); } 40% { filter: hue-rotate(-60deg); } 60% { filter: hue-rotate(-90deg); } 80% { filter: hue-rotate(-45deg); } }
 
-        /* Flip Clock */
-        .clock-wrapper { display: flex; flex-direction: row; align-items: center; gap: 8px; }
-        .date-display { font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; background: #1a1a21; padding: 4px 8px; border-radius: 12px; border: 1px solid #333; }
+        /* FIXED Flip Clock (No Shaking/Jitter) */
+        .clock-wrapper { display: flex; flex-direction: row; align-items: center; gap: 8px; min-width: 230px; }
+        .date-display { font-size: 10px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; background: #1a1a21; padding: 4px 8px; border-radius: 12px; border: 1px solid #333; white-space: nowrap; }
         .date-display .day { color: #00d2ff; margin-right: 2px; }
         .date-display .date { color: #ffffff; }
 
-        .flip-clock { display: flex; gap: 4px; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; }
-        .flip-unit { position: relative; width: 24px; height: 32px; background: #16161a; border-radius: 4px; font-size: 16px; color: #00d2ff; border: 1px solid #333; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .flip-clock { display: flex; align-items: center; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-variant-numeric: tabular-nums; }
+        .flip-clock .colon { width: 10px; text-align: center; font-size: 16px; font-weight: 900; }
+        .flip-unit { position: relative; width: 28px; height: 32px; background: #16161a; border-radius: 4px; font-size: 16px; color: #00d2ff; border: 1px solid #333; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
         .flip-top, .flip-bottom, .flip-flap-top, .flip-flap-bottom { position: absolute; left: 0; width: 100%; height: 16px; background: #22222a; overflow: hidden; backface-visibility: hidden; }
         .flip-top { top: 0; border-radius: 4px 4px 0 0; }
         .flip-bottom { bottom: 0; border-radius: 0 0 4px 4px; }
@@ -128,7 +130,7 @@
         .flip-top span, .flip-flap-top span { top: 0; }
         .flip-bottom span, .flip-flap-bottom span { top: -16px; }
         .flip-unit::after { content: ''; position: absolute; left: 0; top: 16px; width: 100%; height: 1px; background: rgba(0, 0, 0, 0.9); z-index: 5; box-shadow: 0 1px 0 rgba(255,255,255,0.05);}
-        .flip-ampm { font-size: 13px; color: #ff0055; margin-left: 3px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; }
+        .flip-ampm { font-size: 13px; color: #ff0055; margin-left: 5px; font-family: 'Segoe UI', Tahoma, sans-serif; font-weight: 900; width: 22px; }
 
         @keyframes flipTop { 0% { transform: rotateX(0deg); } 100% { transform: rotateX(-90deg); } }
         @keyframes flipBottom { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0deg); } }
@@ -140,13 +142,16 @@
         .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: 0.6; pointer-events: none; }
 
         /* ==========================================
-           VIDEO PLAYER & CONTROLS 
+           VIDEO PLAYER (Optimized Size for TV & PC)
            ========================================== */
-        .video-wrapper { position: relative; width: 100%; max-width: 850px; max-height: 45vh; margin: 0 auto; aspect-ratio: 16/9; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .video-wrapper { position: relative; width: 100%; max-width: 800px; margin: 0 auto; aspect-ratio: 16/9; max-height: 40vh; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; }
         
-        /* Desktop Video Optimization */
+        /* Desktop & TV Player Size Constraints */
         @media (min-width: 768px) {
-            .video-wrapper { max-height: 70vh; max-width: 1000px; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+            .video-wrapper { max-height: 48vh; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        }
+        @media (max-width: 600px) {
+            .video-wrapper { max-width: 100%; max-height: 35vh; border-radius: 0; }
         }
 
         video { width: 100%; height: 100%; outline: none; display: block; transition: object-fit 0.3s ease; }
@@ -284,7 +289,6 @@
             .channel-card { width: 110px; } .channel-card img { height: 60px; }
             .event-card { width: 140px; }
             #video-watermark { top: 10px; right: 10px; font-size: 12px; }
-            .video-wrapper { max-height: none; }
         }
     </style>
 </head>
@@ -292,7 +296,7 @@
 
     <div class="sticky-header-video">
         <header class="navbar">
-            <!-- Row 1: Logo & Website Link -->
+            <!-- Row 1: Logo & Fake Live Viewers Button -->
             <div class="header-top-row">
                 <div class="logo-wrapper tv-focusable" tabindex="0" onclick="window.location.href='/'">
                     <div class="loader loader-header">
@@ -301,10 +305,14 @@
                     </div>
                     <div class="logo-text">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
                 </div>
-                <a href="https://rklived.vercel.app/" target="_blank" class="site-link-btn tv-focusable" tabindex="0">১ম ওয়েবসাইট</a>
+                <!-- FIXED: Original Live Viewers Counter (Fake) -->
+                <div class="live-viewers-btn tv-focusable" tabindex="0">
+                    <span class="dot"></span>
+                    <span id="fake-viewer-count">1,245</span> Watching
+                </div>
             </div>
 
-            <!-- Row 2: Clock & Search Box -->
+            <!-- Row 2: FIXED Clock & Search Box -->
             <div class="header-bottom-row">
                 <div class="clock-wrapper">
                     <div class="date-display" id="date-display">
@@ -314,11 +322,11 @@
                         <div class="flip-unit" id="flip-h" data-value="00">
                             <div class="flip-top"><span>00</span></div><div class="flip-bottom"><span>00</span></div>
                             <div class="flip-flap-top"><span>00</span></div><div class="flip-flap-bottom"><span>00</span></div>
-                        </div>:
+                        </div><span class="colon">:</span>
                         <div class="flip-unit" id="flip-m" data-value="00">
                             <div class="flip-top"><span>00</span></div><div class="flip-bottom"><span>00</span></div>
                             <div class="flip-flap-top"><span>00</span></div><div class="flip-flap-bottom"><span>00</span></div>
-                        </div>:
+                        </div><span class="colon">:</span>
                         <div class="flip-unit" id="flip-s" data-value="00">
                             <div class="flip-top"><span>00</span></div><div class="flip-bottom"><span>00</span></div>
                             <div class="flip-flap-top"><span>00</span></div><div class="flip-flap-bottom"><span>00</span></div>
@@ -333,6 +341,7 @@
             </div>
         </header>
 
+        <!-- VIDEO PLAYER (Size optimized to show channels) -->
         <div class="video-wrapper tv-focusable" id="videoContainer" tabindex="0">
             <div id="video-watermark">RK <span class="live">LIVE</span> <span class="tv">TV</span></div>
             <div id="toast-msg" class="toast">Action</div>
@@ -426,9 +435,9 @@
 
     <div id="ad-banner-1" class="ad-container"></div>
 
-    <!-- 1. LIVE SPORTS API Categorized Section (NEW DROPDOWN) -->
+    <!-- 1. LIVE SPORTS API Categorized Section (DROPDOWN) -->
     <div class="filter-container" id="api-filter-container" style="display:none;">
-        <h3>🏆 Live Sports Categories</h3>
+        <h3>🏆 Live Sports</h3>
         <select id="api-sport-filter" class="category-select tv-focusable" onchange="renderSelectedApiSport()" tabindex="0">
             <!-- Options will load dynamically -->
         </select>
@@ -491,13 +500,28 @@
         // ==========================================
         // HIGH SECURITY LOGIC (Anti-Hack / Anti-Dev)
         // ==========================================
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Block Right Click
+        document.addEventListener('contextmenu', event => event.preventDefault()); 
         document.onkeydown = function(e) {
-            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
             if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
                 return false;
             }
         };
+
+        // ==========================================
+        // FAKE LIVE VIEWERS SCRIPT
+        // ==========================================
+        let baseViewers = 1200 + Math.floor(Math.random() * 500); // Start between 1200 - 1700
+        function updateFakeViewers() {
+            const viewerEl = document.getElementById('fake-viewer-count');
+            if(!viewerEl) return;
+            // Add/Subtract random users (-40 to +60)
+            let fluctuation = Math.floor(Math.random() * 100) - 40;
+            baseViewers += fluctuation;
+            if(baseViewers < 500) baseViewers = 500; // Minimum limit
+            viewerEl.innerText = baseViewers.toLocaleString();
+        }
+        updateFakeViewers();
+        setInterval(updateFakeViewers, 30000); // Change roughly every 30 seconds
 
         // ==========================================
         // FIREBASE REST API CONFIGURATION 
@@ -506,8 +530,8 @@
         const myWebsiteLogo = "https://placehold.co/300x200/1a1a21/00d2ff/png?text=RK+LIVE+TV&font=Montserrat"; 
 
         let allCustomChannels = [], allPlaylistChannels = [], groupedPlaylistChannels = {}, isInitialLoad = true;
-        let apiMatchesData = {}; // NEW: Store API matches mapped by sport ID
-        let apiToggles = {}; // ON/OFF status from Admin
+        let apiMatchesData = {}; 
+        let apiToggles = {}; 
         
         let currentStreamType = 'm3u8'; 
         let ytPlayer = null; 
@@ -541,7 +565,6 @@
                     slider.scrollLeft = scrollLeft - walk;
                 });
 
-                // Desktop Mouse Wheel support for horizontal scrolling
                 slider.addEventListener('wheel', (e) => {
                     if (e.deltaY !== 0) {
                         e.preventDefault();
@@ -550,23 +573,6 @@
                 });
             });
         }
-
-        // Visitor Tracking via REST
-        async function logVisitorREST() {
-            const d = new Date();
-            const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
-            if(localStorage.getItem('visited_today') !== todayStr) {
-                try {
-                    let res = await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`);
-                    let current = await res.json() || 0;
-                    await fetch(`${FIREBASE_DB_URL}/analytics/visitors/${todayStr}.json`, { method: 'PUT', body: JSON.stringify(current + 1) });
-                    localStorage.setItem('visited_today', todayStr);
-                } catch(e) {}
-            }
-        }
-        window.onload = function() { logVisitorREST(); };
-
-        function onYouTubeIframeAPIReady() { }
 
         // Clock Logic
         function updateFlip(id, val) {
@@ -592,7 +598,7 @@
         }
         syncClock(); 
 
-        // Global Countdown Timers & Badge Updater
+        // Global Countdown Timers
         setInterval(() => {
             const now = new Date().getTime();
             document.querySelectorAll('.match-countdown').forEach(el => {
@@ -654,7 +660,6 @@
                 const settingsObj = await settingsRes.json(); 
                 const m3uObj = await m3uRes.json();
                 
-                // Custom Channels
                 allCustomChannels = [];
                 if (channelsObj) {
                     Object.keys(channelsObj).forEach(key => { allCustomChannels.push({ id: key, ...channelsObj[key] }); });
@@ -662,13 +667,12 @@
                 }
                 renderCustomChannels();
 
-                // M3U Channels Array setup
                 allPlaylistChannels = [];
                 if (m3uObj) {
                     Object.keys(m3uObj).forEach(key => { allPlaylistChannels.push({ id: key, ...m3uObj[key] }); });
                     allPlaylistChannels.sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
-                renderPlaylistChannels(); // Populate dropdown
+                renderPlaylistChannels();
 
                 if (isInitialLoad) {
                     if (allCustomChannels.length > 0) playVideo(allCustomChannels[0].url, allCustomChannels[0].id, allCustomChannels[0].type || 'm3u8');
@@ -684,7 +688,6 @@
                     apiToggles = settingsObj.apiSportsToggles || {};
                     fetchActiveApiMatches(); 
 
-                    // Ads loading
                     if (settingsObj.ads) {
                         const ad = settingsObj.ads;
                         const b1 = document.getElementById('ad-banner-1'); if(ad.banner1 && ad.banner1.status === 'enabled') { b1.style.display = 'flex'; b1.innerHTML = ad.banner1.code; } else b1.style.display = 'none';
@@ -694,12 +697,10 @@
                         if(ad.popup2 && ad.popup2.status === 'enabled') p.innerHTML += ad.popup2.code;
                     }
                 }
-            } catch (error) { console.error("Data Fetch Error:", error); }
+            } catch (error) {}
         }
         
-        // ==========================================
-        // NEW: Fetch Active API Matches into Dropdown Menu
-        // ==========================================
+        // Fetch Active API Matches into Dropdown Menu
         async function fetchActiveApiMatches() {
             try {
                 const sportsRes = await fetch('https://streamed.pk/api/sports');
@@ -717,9 +718,9 @@
                     return;
                 }
 
-                let currentSelection = selectMenu.value; // Store user's current selection
+                let currentSelection = selectMenu.value; 
                 selectMenu.innerHTML = ''; 
-                apiMatchesData = {}; // Clear old data
+                apiMatchesData = {}; 
                 let hasMatches = false;
 
                 for (const sport of activeSports) {
@@ -728,12 +729,10 @@
                     
                     if(matches && matches.length > 0) {
                         apiMatchesData[sport.id] = matches;
-                        
                         const opt = document.createElement('option');
                         opt.value = sport.id;
                         opt.innerText = "🏆 " + sport.name;
                         selectMenu.appendChild(opt);
-                        
                         hasMatches = true;
                     }
                 }
@@ -741,7 +740,6 @@
                 if (hasMatches) {
                     filterContainer.style.display = 'flex';
                     matchesList.style.display = 'flex';
-                    // Re-apply previous selection if it still exists
                     if (currentSelection && apiMatchesData[currentSelection]) {
                         selectMenu.value = currentSelection;
                     }
@@ -753,7 +751,6 @@
             } catch (err) { }
         }
 
-        // Render the currently selected sport matches from the Dropdown
         function renderSelectedApiSport() {
             const selectedSportId = document.getElementById('api-sport-filter').value;
             const container = document.getElementById('api-matches-list');
@@ -853,7 +850,6 @@
             }
         });
 
-        // Player Controls
         const aspectModes = ['contain', 'cover', 'fill', 'scale-down', 'none'];
         const ytScaleModes = ['scale(1)', 'scale(1.35)', 'scale(1.35, 1.5)', 'scale(0.8)', 'scale(1)']; 
         const aspectIconsList = ['<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>','<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>','<path d="M2 5h20v14H2z M4 7h16v10H4z M9 9h6v6H9z"/>','<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7V7h10v10z"/>','<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM10 10h4v4h-4z"/>'];
@@ -956,7 +952,6 @@
 
         let currentPlayingId = null; 
 
-        // Removing Sandbox
         function prepareEmbedCode(html) {
             const parser = new DOMParser(); const doc = parser.parseFromString(html, 'text/html'); const iframes = doc.querySelectorAll('iframe');
             iframes.forEach(ifr => { 
@@ -971,9 +966,7 @@
             return doc.body.innerHTML;
         }
 
-        // Popup Modals
         function closeStreamPopup() { document.getElementById('stream-popup-overlay').style.display = 'none'; }
-        
         function openAboutPopup() { document.getElementById('about-popup-overlay').style.display = 'flex'; }
         function closeAboutPopup() { document.getElementById('about-popup-overlay').style.display = 'none'; }
 
@@ -1015,10 +1008,6 @@
 
         function extractYouTubeID(url) { let match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/); return (match && match[7].length == 11) ? match[7] : url; }
 
-        // ==========================================
-        // MAIN VIDEO PLAYER CONTROLLER
-        // Optimized for FAST LOADING & NO BUFFERING
-        // ==========================================
         function playVideo(url, id, type) {
             currentPlayingId = id; hideControls(); loadingOverlay.classList.remove('hidden'); hideWatermark(); currentStreamType = type || 'm3u8';
             document.querySelectorAll('.channel-card, .event-card').forEach(c => c.classList.remove('active'));
@@ -1061,7 +1050,6 @@
                 youtubeContainer.innerHTML = ''; youtubeContainer.style.display = 'none'; video.style.display = 'block'; ytOverlayClick.style.display = 'none';
                 if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
                 
-                // NO BUFFERING HLS CONFIGURATION
                 if (Hls.isSupported()) { 
                     if (window.hls) window.hls.destroy(); 
                     window.hls = new Hls({ 
@@ -1080,7 +1068,6 @@
             } 
         }
 
-        // Back button action
         document.getElementById('btn-back').addEventListener('click', (e) => { 
             e.stopPropagation(); 
             if(document.fullscreenElement || document.webkitFullscreenElement) {
@@ -1093,7 +1080,6 @@
             loadingOverlay.classList.remove('hidden'); setTimeout(()=> loadingOverlay.classList.add('hidden'), 500);
         });
 
-        // Custom Channels Renderer
         function renderCustomChannels() {
             const q = document.getElementById('searchInput').value.toLowerCase(); const c = document.getElementById('user-category-filter').value;
             const container = document.getElementById('user-channel-list'); container.innerHTML = '';
@@ -1109,27 +1095,17 @@
             attachDragToScroll();
         }
 
-        // ==========================================
-        // Playlist M3U Categories (Dropdown Logic)
-        // ==========================================
         function renderPlaylistChannels() {
             const filterContainer = document.getElementById('m3u-filter-container');
             const selectMenu = document.getElementById('m3u-category-filter');
-            
-            if(allPlaylistChannels.length === 0) { 
-                filterContainer.style.display = 'none'; 
-                return; 
-            }
+            if(allPlaylistChannels.length === 0) { filterContainer.style.display = 'none'; return; }
             
             filterContainer.style.display = 'flex';
-            
-            // Group channels by category
             groupedPlaylistChannels = allPlaylistChannels.reduce((acc, ch) => {
                 const cat = (ch.category || 'Others').toUpperCase();
                 if (!acc[cat]) acc[cat] = []; acc[cat].push(ch); return acc;
             }, {});
             
-            // Populate dropdown menu
             selectMenu.innerHTML = '';
             for (const cat in groupedPlaylistChannels) {
                 const opt = document.createElement('option');
@@ -1137,8 +1113,6 @@
                 opt.innerText = "📡 " + cat + " CHANNELS";
                 selectMenu.appendChild(opt);
             }
-            
-            // Initial render of the first selected category
             renderSelectedPlaylistCategory(); 
         }
 
@@ -1146,7 +1120,6 @@
             const selectedCat = document.getElementById('m3u-category-filter').value;
             const container = document.getElementById('m3u-channel-list');
             container.innerHTML = '';
-            
             if(groupedPlaylistChannels[selectedCat]) {
                 groupedPlaylistChannels[selectedCat].forEach(ch => {
                     let isActive = ch.id === currentPlayingId ? 'active' : '';
